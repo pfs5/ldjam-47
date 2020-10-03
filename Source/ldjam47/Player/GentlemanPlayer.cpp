@@ -1,10 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "GentlemanPlayer.h"
+#include "Components/BoxComponent.h"
 /*----------------------------------------------------------------------------------------------------*/
 AGentlemanPlayer::AGentlemanPlayer()
 {
+	PrimaryActorTick.bCanEverTick = true;
 
+	_swordHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SwordHitBox"));
+	_swordHitBox->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

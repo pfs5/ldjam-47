@@ -78,6 +78,9 @@ private:
 	void InputComponent_OnLeftReleased();
 	void InputComponent_OnRightReleased();
 
+	void InputComponent_OnAttackPressed();
+	void InputComponent_OnShieldPressed();
+
 	void AddMovementInput(const EMovementInput& input);
 	void RemoveMovementInput(const EMovementInput& input);
 

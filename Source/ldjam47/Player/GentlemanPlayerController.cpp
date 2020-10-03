@@ -26,6 +26,9 @@ void AGentlemanPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Down", EInputEvent::IE_Released, this, &AGentlemanPlayerController::InputComponent_OnDownReleased);
 	InputComponent->BindAction("Left", EInputEvent::IE_Released, this, &AGentlemanPlayerController::InputComponent_OnLeftReleased);
 	InputComponent->BindAction("Right", EInputEvent::IE_Released, this, &AGentlemanPlayerController::InputComponent_OnRightReleased);
+
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &AGentlemanPlayerController::InputComponent_OnAttackPressed);
+	InputComponent->BindAction("Shield", EInputEvent::IE_Pressed, this, &AGentlemanPlayerController::InputComponent_OnShieldPressed);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::Tick(float deltaSeconds)
@@ -319,6 +322,16 @@ void AGentlemanPlayerController::InputComponent_OnRightReleased()
 
 	UpdateMovementVector();
 	UpdateFlipbook();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::InputComponent_OnAttackPressed()
+{
+
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::InputComponent_OnShieldPressed()
+{
+
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::AddMovementInput(const EMovementInput& input)
