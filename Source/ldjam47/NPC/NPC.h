@@ -9,6 +9,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class APawn;
 class UBoxComponent;
+class UPaperFlipbook;
 class UPaperFlipbookComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
@@ -56,10 +57,10 @@ private:
 	UPROPERTY(EditAnywhere)
 	float _targetRadius = 15.0f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Player")
+	UPROPERTY(VisibleAnywhere, Category = "NPC")
 	EMovablePawnState _npcState;
 
-	UPROPERTY(VisibleAnywhere, Category = "Player")
+	UPROPERTY(VisibleAnywhere, Category = "NPC")
 	EMovablePawnDirection _npcDirection;
 
 	UPROPERTY(EditAnywhere)
@@ -72,5 +73,30 @@ private:
 	UPaperFlipbookComponent* _attackFlipbook;
 
 	EMovementInput _lastMovementInput;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _idleDownFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _idleUpFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _idleLeftFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _idleRightFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _walkDownFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _walkUpFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _walkLeftFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
+	UPaperFlipbook* _walkRightFlipbook;
 };
 /*----------------------------------------------------------------------------------------------------*/

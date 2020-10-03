@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "PaperFlipbook.h"
 /*----------------------------------------------------------------------------------------------------*/
 ANPC::ANPC()
 {
@@ -156,7 +157,86 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 		return;
 	}
 
-
+	if (_npcState == EMovablePawnState::Idle)
+	{
+		switch (_npcDirection)
+		{
+			case EMovablePawnDirection::Right:
+			{
+				if (_idleRightFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_idleRightFlipbook);
+					flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+				}
+				break;
+			}
+			case EMovablePawnDirection::Left:
+			{
+				if (_idleLeftFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_idleLeftFlipbook);
+					flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+				}
+				break;
+			}
+			case EMovablePawnDirection::Back:
+			{
+				if (_idleUpFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_idleUpFlipbook);
+				}
+				break;
+			}
+			case EMovablePawnDirection::Front:
+			{
+				if (_idleDownFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_idleDownFlipbook);
+				}
+				break;
+			}
+		}
+	}
+	else if (_npcState == EMovablePawnState::Walking)
+	{
+		switch (_npcDirection)
+		{
+			case EMovablePawnDirection::Right:
+			{
+				if (_walkRightFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_walkRightFlipbook);
+					flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+				}
+				break;
+			}
+			case EMovablePawnDirection::Left:
+			{
+				if (_walkLeftFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_walkLeftFlipbook);
+					flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+				}
+				break;
+			}
+			case EMovablePawnDirection::Back:
+			{
+				if (_walkUpFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_walkUpFlipbook);
+				}
+				break;
+			}
+			case EMovablePawnDirection::Front:
+			{
+				if (_walkDownFlipbook != nullptr)
+				{
+					flipbook->SetFlipbook(_walkDownFlipbook);
+				}
+				break;
+			}
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::Reset()
