@@ -3,39 +3,11 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "../Misc/MovablePawnsShared.h"
 #include "GentlemanPlayerController.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UCharacterMovementComponent;
 class UPaperFlipbook;
-/*----------------------------------------------------------------------------------------------------*/
-UENUM(BlueprintType)
-enum class EPlayerState : uint8
-{
-	None,
-	Idle,
-	Walking,
-	Attacking,
-	Blocking
-};
-/*----------------------------------------------------------------------------------------------------*/
-UENUM(BlueprintType)
-enum class EPlayerDirection : uint8
-{
-	Right,
-	Left,
-	Back,
-	Front
-};
-/*----------------------------------------------------------------------------------------------------*/
-UENUM(BlueprintType)
-enum class EMovementInput : uint8
-{
-	None,
-	Up,
-	Down,
-	Left,
-	Right
-};
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API AGentlemanPlayerController : public APlayerController
@@ -54,15 +26,15 @@ public:
 public:
 	APawn* GetOwningPlayer() const;
 
-	void SetPlayerState(EPlayerState playerState);
-	EPlayerState GetPlayerState() const;
+	void SetPlayerState(EMovablePawnState playerState);
+	EMovablePawnState GetPlayerState() const;
 	void OnPlayerStateChanged();
 
-	void SetPlayerDirection(EPlayerDirection playerDirection);
-	EPlayerDirection GetPlayerDirection() const;
+	void SetPlayerDirection(EMovablePawnDirection playerDirection);
+	EMovablePawnDirection GetPlayerDirection() const;
 	void OnPlayerDirectionChanged();
 
-	void SetFlipbook(EPlayerState playerState, EPlayerDirection playerDirection);
+	void SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection);
 
 	void Reset();
 	void ResetMovement();
@@ -100,10 +72,10 @@ private:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Player")
-	EPlayerState _playerState;
+	EMovablePawnState _playerState;
 
 	UPROPERTY(VisibleAnywhere, Category = "Player")
-	EPlayerDirection _playerDirection;
+	EMovablePawnDirection _playerDirection;
 
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _idleDownFlipbook;

@@ -42,18 +42,18 @@ void AGentlemanPlayerController::Tick(float deltaSeconds)
 		return;
 	}
 
-	if (_playerState != EPlayerState::Attacking && _playerState != EPlayerState::Blocking)
+	if (_playerState != EMovablePawnState::Attacking && _playerState != EMovablePawnState::Blocking)
 	{
 		float currentAccelerationX = _movementComponent->GetCurrentAcceleration().X;
 		float currentAccelerationZ = _movementComponent->GetCurrentAcceleration().Z;
 
 		if (currentAccelerationX != 0.f || currentAccelerationZ != 0)
 		{
-			SetPlayerState(EPlayerState::Walking);
+			SetPlayerState(EMovablePawnState::Walking);
 		}
 		else if (currentAccelerationX == 0.f && currentAccelerationZ == 0)
 		{
-			SetPlayerState(EPlayerState::Idle);
+			SetPlayerState(EMovablePawnState::Idle);
 		}
 
 		MovePlayer();
@@ -94,7 +94,7 @@ void AGentlemanPlayerController::OnUnPossess()
 
 	_isInGame = false;
 
-	SetPlayerState(EPlayerState::None);
+	SetPlayerState(EMovablePawnState::None);
 
 	if (AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer))
 	{
@@ -110,7 +110,7 @@ APawn* AGentlemanPlayerController::GetOwningPlayer() const
 	return _owningPlayer;
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::SetPlayerState(EPlayerState playerState)
+void AGentlemanPlayerController::SetPlayerState(EMovablePawnState playerState)
 {
 	if (_playerState == playerState)
 	{
@@ -122,7 +122,7 @@ void AGentlemanPlayerController::SetPlayerState(EPlayerState playerState)
 	OnPlayerStateChanged();
 }
 /*----------------------------------------------------------------------------------------------------*/
-EPlayerState AGentlemanPlayerController::GetPlayerState() const
+EMovablePawnState AGentlemanPlayerController::GetPlayerState() const
 {
 	return _playerState;
 }
@@ -132,7 +132,7 @@ void AGentlemanPlayerController::OnPlayerStateChanged()
 	SetFlipbook(_playerState, _playerDirection);
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::SetPlayerDirection(EPlayerDirection playerDirection)
+void AGentlemanPlayerController::SetPlayerDirection(EMovablePawnDirection playerDirection)
 {
 	if (_playerDirection == playerDirection)
 	{
@@ -144,7 +144,7 @@ void AGentlemanPlayerController::SetPlayerDirection(EPlayerDirection playerDirec
 	OnPlayerDirectionChanged();
 }
 /*----------------------------------------------------------------------------------------------------*/
-EPlayerDirection AGentlemanPlayerController::GetPlayerDirection() const
+EMovablePawnDirection AGentlemanPlayerController::GetPlayerDirection() const
 {
 	return _playerDirection;
 }
@@ -154,7 +154,7 @@ void AGentlemanPlayerController::OnPlayerDirectionChanged()
 	SetFlipbook(_playerState, _playerDirection);
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDirection playerDirection)
+void AGentlemanPlayerController::SetFlipbook(EMovablePawnState playerState, EMovablePawnDirection playerDirection)
 {
 	AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer);
 	if (player == nullptr)
@@ -180,11 +180,11 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 		return;
 	}
 
-	if (playerState == EPlayerState::Idle)
+	if (playerState == EMovablePawnState::Idle)
 	{
 		switch (_playerDirection)
 		{
-			case EPlayerDirection::Right:
+			case EMovablePawnDirection::Right:
 			{
 				if (_idleRightFlipbook != nullptr)
 				{
@@ -193,7 +193,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				}
 				break;
 			}
-			case EPlayerDirection::Left:
+			case EMovablePawnDirection::Left:
 			{
 				if (_idleLeftFlipbook != nullptr)
 				{
@@ -202,7 +202,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				}
 				break;
 			}
-			case EPlayerDirection::Back:
+			case EMovablePawnDirection::Back:
 			{
 				if (_idleUpFlipbook != nullptr)
 				{
@@ -210,7 +210,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				}
 				break;
 			}
-			case EPlayerDirection::Front:
+			case EMovablePawnDirection::Front:
 			{
 				if (_idleDownFlipbook != nullptr)
 				{
@@ -220,11 +220,11 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 			}
 		}
 	}
-	else if(_playerState == EPlayerState::Walking)
+	else if(_playerState == EMovablePawnState::Walking)
 	{
 		switch (_playerDirection)
 		{
-			case EPlayerDirection::Right:
+			case EMovablePawnDirection::Right:
 			{
 				if (_walkRightFlipbook != nullptr)
 				{
@@ -233,7 +233,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				}
 				break;
 			}
-			case EPlayerDirection::Left:
+			case EMovablePawnDirection::Left:
 			{
 				if (_walkLeftFlipbook != nullptr)
 				{
@@ -242,7 +242,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				}
 				break;
 			}
-			case EPlayerDirection::Back:
+			case EMovablePawnDirection::Back:
 			{
 				if (_walkUpFlipbook != nullptr)
 				{
@@ -250,7 +250,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				}
 				break;
 			}
-			case EPlayerDirection::Front:
+			case EMovablePawnDirection::Front:
 			{
 				if (_walkDownFlipbook != nullptr)
 				{
@@ -260,13 +260,13 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 			}
 		}
 	}
-	else if (_playerState == EPlayerState::Attacking)
+	else if (_playerState == EMovablePawnState::Attacking)
 	{
-		if (_playerDirection == EPlayerDirection::Left)
+		if (_playerDirection == EMovablePawnDirection::Left)
 		{
 			umbrellaAttackFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 		}
-		else if (_playerDirection == EPlayerDirection::Right)
+		else if (_playerDirection == EMovablePawnDirection::Right)
 		{
 			umbrellaAttackFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 		}
@@ -275,13 +275,13 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 		umbrellaAttackFlipbook->SetHiddenInGame(false);
 		umbrellaAttackFlipbook->PlayFromStart();
 	}
-	else if (_playerState == EPlayerState::Blocking)
+	else if (_playerState == EMovablePawnState::Blocking)
 	{
-		if (_playerDirection == EPlayerDirection::Left)
+		if (_playerDirection == EMovablePawnDirection::Left)
 		{
 			umbrellaBlockFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 		}
-		else if (_playerDirection == EPlayerDirection::Right)
+		else if (_playerDirection == EMovablePawnDirection::Right)
 		{
 			umbrellaBlockFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 		}
@@ -294,9 +294,9 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::Reset()
 {
-	_playerDirection = EPlayerDirection::Left;
+	_playerDirection = EMovablePawnDirection::Left;
 	_owningPlayer->SetActorRotation(FRotator::ZeroRotator);
-	SetPlayerState(EPlayerState::Idle);
+	SetPlayerState(EMovablePawnState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::ResetMovement()
@@ -324,7 +324,7 @@ void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedC
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnUpPressed()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -338,7 +338,7 @@ void AGentlemanPlayerController::InputComponent_OnUpPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnDownPressed()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -352,7 +352,7 @@ void AGentlemanPlayerController::InputComponent_OnDownPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -366,7 +366,7 @@ void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnRightPressed()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -380,7 +380,7 @@ void AGentlemanPlayerController::InputComponent_OnRightPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnUpReleased()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -394,7 +394,7 @@ void AGentlemanPlayerController::InputComponent_OnUpReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnDownReleased()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -408,7 +408,7 @@ void AGentlemanPlayerController::InputComponent_OnDownReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -422,7 +422,7 @@ void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnRightReleased()
 {
-	if (_playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
@@ -436,20 +436,20 @@ void AGentlemanPlayerController::InputComponent_OnRightReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 {
-	if (_playerState == EPlayerState::Attacking || _playerState == EPlayerState::Blocking)
+	if (_playerState == EMovablePawnState::Attacking || _playerState == EMovablePawnState::Blocking)
 	{
 		return;
 	}
 
 	ResetMovement();
-	SetPlayerState(EPlayerState::Attacking);
+	SetPlayerState(EMovablePawnState::Attacking);
 	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnBlockPressed()
 {
 	ResetMovement();
-	SetPlayerState(EPlayerState::Blocking);
+	SetPlayerState(EMovablePawnState::Blocking);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnBlockReleased()
@@ -470,7 +470,7 @@ void AGentlemanPlayerController::InputComponent_OnBlockReleased()
 		flipbook->SetHiddenInGame(false);
 	}
 
-	SetPlayerState(EPlayerState::Idle);
+	SetPlayerState(EMovablePawnState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::AddMovementInput(const EMovementInput& input)
@@ -513,22 +513,22 @@ void AGentlemanPlayerController::UpdateFlipbook()
 	{
 		case EMovementInput::Up:
 		{
-			SetPlayerDirection(EPlayerDirection::Back);
+			SetPlayerDirection(EMovablePawnDirection::Back);
 			break;
 		}
 		case EMovementInput::Down:
 		{
-			SetPlayerDirection(EPlayerDirection::Front);
+			SetPlayerDirection(EMovablePawnDirection::Front);
 			break;
 		}
 		case EMovementInput::Left:
 		{
-			SetPlayerDirection(EPlayerDirection::Left);
+			SetPlayerDirection(EMovablePawnDirection::Left);
 			break;
 		}
 		case EMovementInput::Right:
 		{
-			SetPlayerDirection(EPlayerDirection::Right);
+			SetPlayerDirection(EMovablePawnDirection::Right);
 			break;
 		}
 	}
@@ -541,7 +541,7 @@ void AGentlemanPlayerController::ShakeCamera()
 		return;
 	}
 
-	if (_playerDirection == EPlayerDirection::Left || _playerDirection == EPlayerDirection::Right)
+	if (_playerDirection == EMovablePawnDirection::Left || _playerDirection == EMovablePawnDirection::Right)
 	{
 		PlayerCameraManager->PlayCameraShake(_horizontalCameraShake, 1.0f);
 	}
@@ -569,6 +569,6 @@ void AGentlemanPlayerController::OnAttackAnimationFinishedPlaying()
 		flipbook->SetHiddenInGame(false);
 	}
 
-	SetPlayerState(EPlayerState::Idle);
+	SetPlayerState(EMovablePawnState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
