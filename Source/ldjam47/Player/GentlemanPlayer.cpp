@@ -24,6 +24,11 @@ AGentlemanPlayer::AGentlemanPlayer()
 	_umbrellaBlockFlipbook->SetHiddenInGame(true);
 }
 /*----------------------------------------------------------------------------------------------------*/
+UBoxComponent* AGentlemanPlayer::GetUmbrellaAttackHitBox() const
+{
+	return _umbrellaAttackHitBox;
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* AGentlemanPlayer::GetUmbrellaAttackFlipbook() const
 {
 	return _umbrellaAttackFlipbook;

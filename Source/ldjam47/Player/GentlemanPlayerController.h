@@ -67,6 +67,7 @@ private:
 
 	void ShakeCamera();
 
+	void AttackScan();
 	UFUNCTION()
 	void OnAttackAnimationFinishedPlaying();
 

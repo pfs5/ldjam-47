@@ -17,6 +17,7 @@ class LDJAM47_API AGentlemanPlayer : public APaperCharacter
 public:
 	AGentlemanPlayer();
 
+	UBoxComponent* GetUmbrellaAttackHitBox() const;
 	UPaperFlipbookComponent* GetUmbrellaAttackFlipbook() const;
 	UPaperFlipbookComponent* GetUmbrellaBlockFlipbook() const;
 

@@ -3,6 +3,7 @@
 #include "GentlemanPlayerController.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbook.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbookComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GentlemanPlayer.h"
@@ -443,6 +444,7 @@ void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 
 	//ResetMovement();
 	SetPlayerState(EMovablePawnState::Attacking);
+	AttackScan();
 	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -548,6 +550,28 @@ void AGentlemanPlayerController::ShakeCamera()
 	else
 	{
 		PlayerCameraManager->PlayCameraShake(_verticalCameraShake, 1.0f);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::AttackScan()
+{
+	AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	UBoxComponent* attackHitBox = player->GetUmbrellaAttackHitBox();
+	if (attackHitBox == nullptr)
+	{
+		return;
+	}
+
+	TArray<AActor*> overlappingActors;
+	attackHitBox->GetOverlappingActors(overlappingActors);
+	for (const AActor* overlappingActor : overlappingActors)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
