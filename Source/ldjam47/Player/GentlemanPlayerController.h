@@ -62,6 +62,8 @@ public:
 
 	void SetFlipbook(EPlayerState playerState, EPlayerDirection playerDirection);
 
+	void Reset();
+
 private:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);

@@ -234,6 +234,13 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::Reset()
+{
+	_playerDirection = EPlayerDirection::Left;
+	_owningPlayer->SetActorRotation(FRotator::ZeroRotator);
+	SetPlayerState(EPlayerState::Idle);
+}
+/*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
 	if (otherActor == nullptr && otherActor == this && otherComp == nullptr)
