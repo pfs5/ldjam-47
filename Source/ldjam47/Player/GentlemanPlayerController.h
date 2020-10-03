@@ -13,7 +13,8 @@ enum class EPlayerState : uint8
 {
 	None,
 	Idle,
-	Walking
+	Walking,
+	Attacking
 };
 /*----------------------------------------------------------------------------------------------------*/
 UENUM(BlueprintType)
@@ -90,6 +91,9 @@ private:
 	void UpdateFlipbook();
 
 	void ShakeCamera();
+
+	UFUNCTION()
+	void OnAttackAnimationFinishedPlaying();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Player")

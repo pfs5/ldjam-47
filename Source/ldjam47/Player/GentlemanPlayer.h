@@ -7,6 +7,7 @@
 #include "GentlemanPlayer.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UBoxComponent;
+class UPaperFlipbookComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API AGentlemanPlayer : public APaperCharacter
@@ -15,6 +16,8 @@ class LDJAM47_API AGentlemanPlayer : public APaperCharacter
 
 public:
 	AGentlemanPlayer();
+
+	UPaperFlipbookComponent* GetCaneAttackFlipbook() const;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -25,5 +28,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _caneHitBox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPaperFlipbookComponent* _caneAttackFlipbook;
 };
 /*----------------------------------------------------------------------------------------------------*/

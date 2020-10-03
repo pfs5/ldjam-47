@@ -1,14 +1,26 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "GentlemanPlayer.h"
+#include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
 /*----------------------------------------------------------------------------------------------------*/
 AGentlemanPlayer::AGentlemanPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	_caneAttackFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CaneAttackFlipbook"));
+	_caneAttackFlipbook->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	_caneAttackFlipbook->Stop();
+	_caneAttackFlipbook->SetLooping(false);
+	_caneAttackFlipbook->SetHiddenInGame(true);
+
 	_caneHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CaneHitBox"));
-	_caneHitBox->SetupAttachment(RootComponent);
+	_caneHitBox->SetupAttachment(_caneAttackFlipbook);
+}
+/*----------------------------------------------------------------------------------------------------*/
+UPaperFlipbookComponent* AGentlemanPlayer::GetCaneAttackFlipbook() const
+{
+	return _caneAttackFlipbook;
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

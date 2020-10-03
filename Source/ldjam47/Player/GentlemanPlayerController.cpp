@@ -71,6 +71,10 @@ void AGentlemanPlayerController::OnPossess(APawn* possesedPawn)
 			{
 				capsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AGentlemanPlayerController::OnOverlapBegin);
 			}
+			if (UPaperFlipbookComponent* caneAttackFlipbook = player->GetCaneAttackFlipbook())
+			{
+				caneAttackFlipbook->OnFinishedPlaying.AddDynamic(this, &AGentlemanPlayerController::OnAttackAnimationFinishedPlaying);
+			}
 		}
 
 		Reset();
@@ -159,6 +163,12 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 		return;
 	}
 
+	UPaperFlipbookComponent* caneAttackFlipbook = player->GetCaneAttackFlipbook();
+	if (caneAttackFlipbook == nullptr)
+	{
+		return;
+	}
+
 	if (playerState == EPlayerState::Idle)
 	{
 		switch (_playerDirection)
@@ -168,6 +178,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				if (_idleRightFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_idleRightFlipbook);
+					flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -176,6 +187,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				if (_idleLeftFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_idleLeftFlipbook);
+					flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -197,7 +209,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 			}
 		}
 	}
-	else
+	else if(_playerState == EPlayerState::Walking)
 	{
 		switch (_playerDirection)
 		{
@@ -206,6 +218,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				if (_walkRightFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_walkRightFlipbook);
+					flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -214,6 +227,7 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				if (_walkLeftFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_walkLeftFlipbook);
+					flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -234,6 +248,21 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 				break;
 			}
 		}
+	}
+	else if (_playerState == EPlayerState::Attacking)
+	{
+		if (_playerDirection == EPlayerDirection::Left)
+		{
+			caneAttackFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+		}
+		else if (_playerDirection == EPlayerDirection::Right)
+		{
+			caneAttackFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+		}
+
+		flipbook->SetHiddenInGame(true);
+		caneAttackFlipbook->SetHiddenInGame(false);
+		caneAttackFlipbook->PlayFromStart();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -326,6 +355,7 @@ void AGentlemanPlayerController::InputComponent_OnRightReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 {
+	SetPlayerState(EPlayerState::Attacking);
 	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -410,5 +440,26 @@ void AGentlemanPlayerController::ShakeCamera()
 	{
 		PlayerCameraManager->PlayCameraShake(_verticalCameraShake, 1.0f);
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::OnAttackAnimationFinishedPlaying()
+{
+	AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	if (UPaperFlipbookComponent* caneAttackFlipbook = player->GetCaneAttackFlipbook())
+	{
+		caneAttackFlipbook->SetHiddenInGame(true);
+	}
+
+	if (UPaperFlipbookComponent* flipbook = player->GetSprite())
+	{
+		flipbook->SetHiddenInGame(false);
+	}
+
+	SetPlayerState(EPlayerState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
