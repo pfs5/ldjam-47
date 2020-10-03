@@ -8,19 +8,30 @@ AGentlemanPlayer::AGentlemanPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	_caneAttackFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("CaneAttackFlipbook"));
-	_caneAttackFlipbook->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	_caneAttackFlipbook->Stop();
-	_caneAttackFlipbook->SetLooping(false);
-	_caneAttackFlipbook->SetHiddenInGame(true);
+	_umbrellaAttackFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("UmbrellaAttackFlipbook"));
+	_umbrellaAttackFlipbook->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	_umbrellaAttackFlipbook->Stop();
+	_umbrellaAttackFlipbook->SetLooping(false);
+	_umbrellaAttackFlipbook->SetHiddenInGame(true);
 
-	_caneHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CaneHitBox"));
-	_caneHitBox->SetupAttachment(_caneAttackFlipbook);
+	_umbrellaAttackHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("UmbrellaHitBox"));
+	_umbrellaAttackHitBox->SetupAttachment(_umbrellaAttackFlipbook);
+
+	_umbrellaBlockFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("UmbrellaShieldFlipbook"));
+	_umbrellaBlockFlipbook->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	_umbrellaBlockFlipbook->Stop();
+	_umbrellaBlockFlipbook->SetLooping(false);
+	_umbrellaBlockFlipbook->SetHiddenInGame(true);
 }
 /*----------------------------------------------------------------------------------------------------*/
-UPaperFlipbookComponent* AGentlemanPlayer::GetCaneAttackFlipbook() const
+UPaperFlipbookComponent* AGentlemanPlayer::GetUmbrellaAttackFlipbook() const
 {
-	return _caneAttackFlipbook;
+	return _umbrellaAttackFlipbook;
+}
+/*----------------------------------------------------------------------------------------------------*/
+UPaperFlipbookComponent* AGentlemanPlayer::GetUmbrellaBlockFlipbook() const
+{
+	return _umbrellaBlockFlipbook;
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

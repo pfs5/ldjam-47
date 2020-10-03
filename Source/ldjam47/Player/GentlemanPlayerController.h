@@ -14,7 +14,8 @@ enum class EPlayerState : uint8
 	None,
 	Idle,
 	Walking,
-	Attacking
+	Attacking,
+	Blocking
 };
 /*----------------------------------------------------------------------------------------------------*/
 UENUM(BlueprintType)
@@ -80,7 +81,8 @@ private:
 	void InputComponent_OnRightReleased();
 
 	void InputComponent_OnAttackPressed();
-	void InputComponent_OnShieldPressed();
+	void InputComponent_OnBlockPressed();
+	void InputComponent_OnBlockReleased();
 
 	void AddMovementInput(const EMovementInput& input);
 	void RemoveMovementInput(const EMovementInput& input);

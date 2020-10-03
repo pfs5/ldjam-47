@@ -28,7 +28,9 @@ void AGentlemanPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Right", EInputEvent::IE_Released, this, &AGentlemanPlayerController::InputComponent_OnRightReleased);
 
 	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &AGentlemanPlayerController::InputComponent_OnAttackPressed);
-	InputComponent->BindAction("Shield", EInputEvent::IE_Pressed, this, &AGentlemanPlayerController::InputComponent_OnShieldPressed);
+	InputComponent->BindAction("Block", EInputEvent::IE_Pressed, this, &AGentlemanPlayerController::InputComponent_OnBlockPressed);
+	InputComponent->BindAction("Block", EInputEvent::IE_Released, this, &AGentlemanPlayerController::InputComponent_OnBlockReleased);
+
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::Tick(float deltaSeconds)
@@ -71,7 +73,7 @@ void AGentlemanPlayerController::OnPossess(APawn* possesedPawn)
 			{
 				capsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AGentlemanPlayerController::OnOverlapBegin);
 			}
-			if (UPaperFlipbookComponent* caneAttackFlipbook = player->GetCaneAttackFlipbook())
+			if (UPaperFlipbookComponent* caneAttackFlipbook = player->GetUmbrellaAttackFlipbook())
 			{
 				caneAttackFlipbook->OnFinishedPlaying.AddDynamic(this, &AGentlemanPlayerController::OnAttackAnimationFinishedPlaying);
 			}
@@ -163,8 +165,14 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 		return;
 	}
 
-	UPaperFlipbookComponent* caneAttackFlipbook = player->GetCaneAttackFlipbook();
-	if (caneAttackFlipbook == nullptr)
+	UPaperFlipbookComponent* umbrellaAttackFlipbook = player->GetUmbrellaAttackFlipbook();
+	if (umbrellaAttackFlipbook == nullptr)
+	{
+		return;
+	}
+
+	UPaperFlipbookComponent* umbrellaBlockFlipbook = player->GetUmbrellaBlockFlipbook();
+	if (umbrellaBlockFlipbook == nullptr)
 	{
 		return;
 	}
@@ -253,16 +261,31 @@ void AGentlemanPlayerController::SetFlipbook(EPlayerState playerState, EPlayerDi
 	{
 		if (_playerDirection == EPlayerDirection::Left)
 		{
-			caneAttackFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+			umbrellaAttackFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 		}
 		else if (_playerDirection == EPlayerDirection::Right)
 		{
-			caneAttackFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+			umbrellaAttackFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 		}
 
 		flipbook->SetHiddenInGame(true);
-		caneAttackFlipbook->SetHiddenInGame(false);
-		caneAttackFlipbook->PlayFromStart();
+		umbrellaAttackFlipbook->SetHiddenInGame(false);
+		umbrellaAttackFlipbook->PlayFromStart();
+	}
+	else if (_playerState == EPlayerState::Blocking)
+	{
+		if (_playerDirection == EPlayerDirection::Left)
+		{
+			umbrellaBlockFlipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+		}
+		else if (_playerDirection == EPlayerDirection::Right)
+		{
+			umbrellaBlockFlipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+		}
+
+		flipbook->SetHiddenInGame(true);
+		umbrellaBlockFlipbook->SetHiddenInGame(false);
+		umbrellaBlockFlipbook->PlayFromStart();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -359,9 +382,30 @@ void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::InputComponent_OnShieldPressed()
+void AGentlemanPlayerController::InputComponent_OnBlockPressed()
 {
+	SetPlayerState(EPlayerState::Blocking);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::InputComponent_OnBlockReleased()
+{
+	AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
 
+	if (UPaperFlipbookComponent* umbrellaBlockFlipbook = player->GetUmbrellaBlockFlipbook())
+	{
+		umbrellaBlockFlipbook->SetHiddenInGame(true);
+	}
+
+	if (UPaperFlipbookComponent* flipbook = player->GetSprite())
+	{
+		flipbook->SetHiddenInGame(false);
+	}
+
+	SetPlayerState(EPlayerState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::AddMovementInput(const EMovementInput& input)
@@ -450,7 +494,7 @@ void AGentlemanPlayerController::OnAttackAnimationFinishedPlaying()
 		return;
 	}
 
-	if (UPaperFlipbookComponent* caneAttackFlipbook = player->GetCaneAttackFlipbook())
+	if (UPaperFlipbookComponent* caneAttackFlipbook = player->GetUmbrellaAttackFlipbook())
 	{
 		caneAttackFlipbook->SetHiddenInGame(true);
 	}

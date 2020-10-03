@@ -17,7 +17,8 @@ class LDJAM47_API AGentlemanPlayer : public APaperCharacter
 public:
 	AGentlemanPlayer();
 
-	UPaperFlipbookComponent* GetCaneAttackFlipbook() const;
+	UPaperFlipbookComponent* GetUmbrellaAttackFlipbook() const;
+	UPaperFlipbookComponent* GetUmbrellaBlockFlipbook() const;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -27,9 +28,12 @@ private:
 	float _pixelsPerUnit = 1.f;
 
 	UPROPERTY(EditAnywhere)
-	UBoxComponent* _caneHitBox;
+	UBoxComponent* _umbrellaAttackHitBox;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UPaperFlipbookComponent* _caneAttackFlipbook;
+	UPaperFlipbookComponent* _umbrellaAttackFlipbook;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPaperFlipbookComponent* _umbrellaBlockFlipbook;
 };
 /*----------------------------------------------------------------------------------------------------*/
