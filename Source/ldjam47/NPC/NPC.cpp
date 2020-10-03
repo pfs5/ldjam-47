@@ -181,6 +181,7 @@ void ANPC::MoveToTarget(AActor* target)
 	if (distance < _targetRadius)
 	{
 		OnArrivedToTarget();
+		return;
 	}
 
 	AddMovementInput(direction);
