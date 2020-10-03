@@ -180,12 +180,18 @@ void ANPC::MoveToTarget(AActor* target)
 	float distance = direction.Size();
 	if (distance < _targetRadius)
 	{
-		return;
+		OnArrivedToTarget();
 	}
 
 	AddMovementInput(direction);
 	SetLastMovementInput(direction);
 	UpdateFlipbook();
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*virtual*/
+void ANPC::OnArrivedToTarget()
+{
+
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

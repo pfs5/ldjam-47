@@ -324,7 +324,7 @@ void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedC
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnUpPressed()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -338,7 +338,7 @@ void AGentlemanPlayerController::InputComponent_OnUpPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnDownPressed()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -352,7 +352,7 @@ void AGentlemanPlayerController::InputComponent_OnDownPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -366,7 +366,7 @@ void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnRightPressed()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -380,7 +380,7 @@ void AGentlemanPlayerController::InputComponent_OnRightPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnUpReleased()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -394,7 +394,7 @@ void AGentlemanPlayerController::InputComponent_OnUpReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnDownReleased()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -408,7 +408,7 @@ void AGentlemanPlayerController::InputComponent_OnDownReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}
@@ -422,7 +422,7 @@ void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnRightReleased()
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking || _playerState == EMovablePawnState::Attacking)
 	{
 		return;
 	}

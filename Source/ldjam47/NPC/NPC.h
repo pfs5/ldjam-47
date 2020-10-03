@@ -37,6 +37,7 @@ public:
 	void Reset();
 
 	virtual void MoveToTarget(AActor* target);
+	virtual void OnArrivedToTarget();
 
 protected:
 	virtual void BeginPlay() override;
