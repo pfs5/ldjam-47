@@ -65,6 +65,7 @@ public:
 	void SetFlipbook(EPlayerState playerState, EPlayerDirection playerDirection);
 
 	void Reset();
+	void ResetMovement();
 
 private:
 	UFUNCTION()

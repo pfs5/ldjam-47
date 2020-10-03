@@ -42,19 +42,22 @@ void AGentlemanPlayerController::Tick(float deltaSeconds)
 		return;
 	}
 
-	float currentAccelerationX = _movementComponent->GetCurrentAcceleration().X;
-	float currentAccelerationZ = _movementComponent->GetCurrentAcceleration().Z;
-
-	if (currentAccelerationX != 0.f || currentAccelerationZ != 0)
+	if (_playerState != EPlayerState::Attacking && _playerState != EPlayerState::Blocking)
 	{
-		SetPlayerState(EPlayerState::Walking);
-	}
-	else if (currentAccelerationX == 0.f && currentAccelerationZ == 0)
-	{
-		SetPlayerState(EPlayerState::Idle);
-	}
+		float currentAccelerationX = _movementComponent->GetCurrentAcceleration().X;
+		float currentAccelerationZ = _movementComponent->GetCurrentAcceleration().Z;
 
-	MovePlayer();
+		if (currentAccelerationX != 0.f || currentAccelerationZ != 0)
+		{
+			SetPlayerState(EPlayerState::Walking);
+		}
+		else if (currentAccelerationX == 0.f && currentAccelerationZ == 0)
+		{
+			SetPlayerState(EPlayerState::Idle);
+		}
+
+		MovePlayer();
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::OnPossess(APawn* possesedPawn)
@@ -296,6 +299,21 @@ void AGentlemanPlayerController::Reset()
 	SetPlayerState(EPlayerState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::ResetMovement()
+{
+	_movementUp = 0.f;
+	RemoveMovementInput(EMovementInput::Up);
+	_movementDown = 0.f;
+	RemoveMovementInput(EMovementInput::Down);
+	_movementLeft = 0.f;
+	RemoveMovementInput(EMovementInput::Left);
+	_movementRight = 0.f;
+	RemoveMovementInput(EMovementInput::Right);
+
+	UpdateMovementVector();
+	UpdateFlipbook();
+}
+/*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
 	if (otherActor == nullptr && otherActor == this && otherComp == nullptr)
@@ -306,6 +324,11 @@ void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedC
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnUpPressed()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementUp = 1.f;
 	AddMovementInput(EMovementInput::Up);
 
@@ -315,6 +338,11 @@ void AGentlemanPlayerController::InputComponent_OnUpPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnDownPressed()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementDown = 1.f;
 	AddMovementInput(EMovementInput::Down);
 
@@ -324,6 +352,11 @@ void AGentlemanPlayerController::InputComponent_OnDownPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementLeft = 1.f;
 	AddMovementInput(EMovementInput::Left);
 
@@ -333,6 +366,11 @@ void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnRightPressed()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementRight = 1.f;
 	AddMovementInput(EMovementInput::Right);
 
@@ -342,6 +380,11 @@ void AGentlemanPlayerController::InputComponent_OnRightPressed()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnUpReleased()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementUp = 0.f;
 	RemoveMovementInput(EMovementInput::Up);
 
@@ -351,6 +394,11 @@ void AGentlemanPlayerController::InputComponent_OnUpReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnDownReleased()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementDown = 0.f;
 	RemoveMovementInput(EMovementInput::Down);
 
@@ -360,6 +408,11 @@ void AGentlemanPlayerController::InputComponent_OnDownReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementLeft = 0.f;
 	RemoveMovementInput(EMovementInput::Left);
 
@@ -369,6 +422,11 @@ void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnRightReleased()
 {
+	if (_playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
 	_movementRight = 0.f;
 	RemoveMovementInput(EMovementInput::Right);
 
@@ -378,12 +436,19 @@ void AGentlemanPlayerController::InputComponent_OnRightReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 {
+	if (_playerState == EPlayerState::Attacking || _playerState == EPlayerState::Blocking)
+	{
+		return;
+	}
+
+	ResetMovement();
 	SetPlayerState(EPlayerState::Attacking);
 	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnBlockPressed()
 {
+	ResetMovement();
 	SetPlayerState(EPlayerState::Blocking);
 }
 /*----------------------------------------------------------------------------------------------------*/
