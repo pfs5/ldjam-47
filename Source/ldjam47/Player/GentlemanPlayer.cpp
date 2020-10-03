@@ -7,8 +7,8 @@ AGentlemanPlayer::AGentlemanPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	_swordHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SwordHitBox"));
-	_swordHitBox->SetupAttachment(RootComponent);
+	_caneHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CaneHitBox"));
+	_caneHitBox->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

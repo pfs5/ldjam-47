@@ -89,6 +89,8 @@ private:
 
 	void UpdateFlipbook();
 
+	void ShakeCamera();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Player")
 	EPlayerState _playerState;
@@ -137,5 +139,12 @@ private:
 	float _movementRight = 0.f;
 
 	std::deque<EMovementInput> _movementInputs;
+
+private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShake> _verticalCameraShake;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShake> _horizontalCameraShake;
 };
 /*----------------------------------------------------------------------------------------------------*/

@@ -326,7 +326,7 @@ void AGentlemanPlayerController::InputComponent_OnRightReleased()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 {
-
+	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnShieldPressed()
@@ -392,6 +392,23 @@ void AGentlemanPlayerController::UpdateFlipbook()
 			SetPlayerDirection(EPlayerDirection::Right);
 			break;
 		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::ShakeCamera()
+{
+	if (_verticalCameraShake == nullptr || PlayerCameraManager == nullptr)
+	{
+		return;
+	}
+
+	if (_playerDirection == EPlayerDirection::Left || _playerDirection == EPlayerDirection::Right)
+	{
+		PlayerCameraManager->PlayCameraShake(_horizontalCameraShake, 1.0f);
+	}
+	else
+	{
+		PlayerCameraManager->PlayCameraShake(_verticalCameraShake, 1.0f);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

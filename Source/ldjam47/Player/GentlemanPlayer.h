@@ -24,6 +24,6 @@ private:
 	float _pixelsPerUnit = 1.f;
 
 	UPROPERTY(EditAnywhere)
-	UBoxComponent* _swordHitBox;
+	UBoxComponent* _caneHitBox;
 };
 /*----------------------------------------------------------------------------------------------------*/
