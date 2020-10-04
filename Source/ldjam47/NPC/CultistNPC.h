@@ -16,8 +16,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void MoveToTarget(AActor* target) override;
-	virtual void OnArrivedToTarget(AActor* target);
-	virtual void AttackTarget(AActor* target);
+	virtual void OnArrivedToTarget(AActor* target) override;
+	virtual void AttackTarget(AActor* target) override;
 
 private:
 	UPROPERTY(EditAnywhere)

@@ -8,7 +8,6 @@
 #include "NPC.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class APawn;
-class UArrowComponent;
 class UBoxComponent;
 class UPaperFlipbook;
 class UPaperFlipbookComponent;
@@ -27,7 +26,6 @@ public:
 
 	UPaperFlipbookComponent* GetAttackFlipbook() const;
 	APawn* GetTargetPlayer() const;
-	UArrowComponent* GetShootProjectileDirection() const;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -127,9 +125,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _attackFlipbook;
-
-	UPROPERTY(EditAnywhere)
-	UArrowComponent* _shootProjectileDirection;
 
 	FVector _lastMovementVector;
 

@@ -2,38 +2,41 @@
 /*----------------------------------------------------------------------------------------------------*/
 #pragma once
 
-#include "Projectile.generated.h"
+#include "NPC.h"
+#include "FatNPC.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
-class UPaperFlipbookComponent;
-class UProjectileMovementComponent;
-class USphereComponent;
+class AProjectile;
+class UCameraShake;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
-class LDJAM47_API AProjectile : public AActor
+class LDJAM47_API AFatNPC : public ANPC
 {
 	GENERATED_BODY()
 
 public:
-	AProjectile();
+	virtual void Tick(float DeltaTime) override;
 
-protected:
-	virtual void BeginPlay() override;
-
-private:
-	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
+	virtual void MoveToTarget(AActor* target) override;
+	virtual void AttackTarget(AActor* target) override;
 
 private:
+	void ShakeCamera();
+	void SpecialAttack(AActor* target);
+
+private:
 	UPROPERTY(EditAnywhere)
-	float _damage = 0.1f;
+	TSubclassOf<UCameraShake> _walkingCameraShake;
 
 	UPROPERTY(EditAnywhere)
-	UProjectileMovementComponent* _projectileMovementComponent;
+	TSubclassOf<AProjectile> _projectileClass;
+
+private:
+	UPROPERTY(EditAnywhere)
+	float _specialAttackDelay = 20.0f;
+
+	float _specialAttackDelayTimer = 0.0f;
 
 	UPROPERTY(EditAnywhere)
-	UPaperFlipbookComponent* _flipbookComponent;
-
-	UPROPERTY(EditAnywhere)
-	USphereComponent* _sphereComponent;
+	int32 _numberOfSpecialAttackProjectiles = 12;
 };
 /*----------------------------------------------------------------------------------------------------*/

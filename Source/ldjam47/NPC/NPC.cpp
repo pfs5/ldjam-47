@@ -24,9 +24,6 @@ ANPC::ANPC()
 	_attackHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackHitBox"));
 	_attackHitBox->SetupAttachment(_attackFlipbook);
 
-	_shootProjectileDirection = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootProjectileDirection"));
-	_shootProjectileDirection->SetupAttachment(GetSprite());
-
 	if (UCharacterMovementComponent* characterMovement = GetCharacterMovement())
 	{
 		characterMovement->bRunPhysicsWithNoController = true;
@@ -161,11 +158,6 @@ APawn* ANPC::GetTargetPlayer() const
 	return _targetPlayer.Get();
 }
 /*----------------------------------------------------------------------------------------------------*/
-UArrowComponent* ANPC::GetShootProjectileDirection() const
-{
-	return _shootProjectileDirection;
-}
-/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void ANPC::Tick(float deltaTime)
 {
@@ -258,7 +250,8 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 				if (_idleRightFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_idleRightFlipbook);
-					flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+					flipbook->SetWorldRotation(FRotator(0.0f, 0.0f, 0.0f));
+					//flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -267,7 +260,8 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 				if (_idleLeftFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_idleLeftFlipbook);
-					flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+					flipbook->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
+					//flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -298,7 +292,8 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 				if (_walkRightFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_walkRightFlipbook);
-					flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+					flipbook->SetWorldRotation(FRotator(0.0f, 0.0f, 0.0f));
+					//flipbook->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
@@ -307,7 +302,8 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 				if (_walkLeftFlipbook != nullptr)
 				{
 					flipbook->SetFlipbook(_walkLeftFlipbook);
-					flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
+					flipbook->SetWorldRotation(FRotator(0.0f, 180.0f, 0.0f));
+					//flipbook->SetWorldScale3D(FVector(-1.0f, 1.0f, 1.0f));
 				}
 				break;
 			}
