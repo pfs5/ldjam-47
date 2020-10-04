@@ -18,6 +18,9 @@ class LDJAM47_API ANPC : public APaperCharacter
 	GENERATED_BODY()
 
 public:
+	DECLARE_EVENT(ANPC, FOnDestroyed)
+	FOnDestroyed OnDestroyed;
+
 	DECLARE_EVENT_OneParam(ANPC, FOnNPCAttackedTarget, AActor*)
 	FOnNPCAttackedTarget OnNPCAttackedTarget;
 

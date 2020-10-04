@@ -28,6 +28,11 @@ void AProjectile::BeginPlay()
 	{
 		_sphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnOverlapBegin);
 	}
+
+	if (ANPC* owner = Cast<ANPC>(GetOwner()))
+	{
+		owner->OnDestroyed.AddUObject(this, &AProjectile::OnOwnerDestroyed);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -50,5 +55,10 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 			Destroy();
 		}
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AProjectile::OnOwnerDestroyed()
+{
+	Destroy();
 }
 /*----------------------------------------------------------------------------------------------------*/

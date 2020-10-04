@@ -439,6 +439,7 @@ void ANPC::OnHealthChanged()
 {
 	if (_health <= 0.0f)
 	{
+		OnDestroyed.Broadcast();
 		Destroy();
 	}
 }
