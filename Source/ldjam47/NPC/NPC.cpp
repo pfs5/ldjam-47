@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "NPC.h"
+#include "../Player/GentlemanPlayer.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbookComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PaperFlipbook.h"
@@ -125,17 +127,22 @@ void ANPC::Tick(float deltaTime)
 		MoveToTarget(_targetPlayer.Get());
 	}
 
-	float currentAccelerationX = GetCharacterMovement()->GetCurrentAcceleration().X;
-	float currentAccelerationZ = GetCharacterMovement()->GetCurrentAcceleration().Z;
+	if (_npcState != EMovablePawnState::Attacking)
+	{
+		float currentAccelerationX = GetCharacterMovement()->GetCurrentAcceleration().X;
+		float currentAccelerationZ = GetCharacterMovement()->GetCurrentAcceleration().Z;
 
-	if (currentAccelerationX != 0.f || currentAccelerationZ != 0)
-	{
-		SetNPCState(EMovablePawnState::Walking);
+		if (currentAccelerationX != 0.f || currentAccelerationZ != 0)
+		{
+			SetNPCState(EMovablePawnState::Walking);
+		}
+		else if (currentAccelerationX == 0.f && currentAccelerationZ == 0)
+		{
+			SetNPCState(EMovablePawnState::Idle);
+		}
 	}
-	else if (currentAccelerationX == 0.f && currentAccelerationZ == 0)
-	{
-		SetNPCState(EMovablePawnState::Idle);
-	}
+
+	_attackDelayTimer += deltaTime;
 
 	//SnapLocation();
 }
@@ -289,17 +296,25 @@ void ANPC::MoveToTarget(AActor* target)
 	{
 		return;
 	}
+	
+	APaperCharacter* targetCharacter = Cast<APaperCharacter>(target);
+	if (targetCharacter == nullptr)
+	{
+		return;
+	}
 
 	FVector npcLocation = GetActorLocation();
-	FVector targetLocation = target->GetActorLocation();
+	float npcCollisionRadius = GetCapsuleComponent()->GetScaledCapsuleRadius();
+
+	FVector targetLocation = targetCharacter->GetActorLocation();
+	float targetCollisionRadius = targetCharacter->GetCapsuleComponent()->GetScaledCapsuleRadius();
+	
 	FVector direction = targetLocation - npcLocation;
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, FString::SanitizeFloat(direction.X));
-
 	float distance = direction.Size();
-	if (distance < _targetRadius)
+	if (distance < npcCollisionRadius + targetCollisionRadius + _targetRadius)
 	{
-		OnArrivedToTarget();
+		OnArrivedToTarget(target);
 		return;
 	}
 
@@ -309,9 +324,37 @@ void ANPC::MoveToTarget(AActor* target)
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*virtual*/
-void ANPC::OnArrivedToTarget()
+void ANPC::OnArrivedToTarget(AActor* target)
 {
-	
+	if (target == nullptr)
+	{
+		return;
+	}
+
+	AttackTarget(target);
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*virtual*/
+void ANPC::AttackTarget(AActor* target)
+{
+	if (_attackDelayTimer < _attackDelay)
+	{
+		return;
+	}
+
+	if (target == nullptr)
+	{
+		return;
+	}
+
+	if (AGentlemanPlayer* targetCharacter = Cast<AGentlemanPlayer>(target))
+	{
+		targetCharacter->ApplyDamage(_attackDamage);
+	}
+
+	_attackDelayTimer = 0.0f;
+
+	OnNPCAttackedTarget.Broadcast(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::ApplyDamage(EMovablePawnDirection direction)

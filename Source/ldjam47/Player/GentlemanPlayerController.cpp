@@ -575,6 +575,7 @@ void AGentlemanPlayerController::AttackScan()
 		{
 			npc->ApplyDamage(_playerDirection);
 			ShakeCamera();
+			OnPlayerAttackedTarget.Broadcast(npc);
 			return;
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());

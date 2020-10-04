@@ -18,6 +18,10 @@ class LDJAM47_API ANPC : public APaperCharacter
 	GENERATED_BODY()
 
 public:
+	DECLARE_EVENT_OneParam(ANPC, FOnNPCAttackedTarget, AActor*)
+	FOnNPCAttackedTarget OnNPCAttackedTarget;
+
+public:
 	ANPC();
 
 	UPaperFlipbookComponent* GetAttackFlipbook() const;
@@ -38,7 +42,8 @@ public:
 	void Reset();
 
 	virtual void MoveToTarget(AActor* target);
-	virtual void OnArrivedToTarget();
+	virtual void OnArrivedToTarget(AActor* target);
+	virtual void AttackTarget(AActor* target);
 
 	virtual void ApplyDamage(EMovablePawnDirection direction);
 	void SetHealth(float health);
@@ -67,12 +72,18 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool _applyKnockback = true;
 
+	float _attackDamage = 0.1f;
+
+	float _attackDelay = 2.0f;
+
+	float _attackDelayTimer = 2.0f;
+
 private:
 	UPROPERTY(EditAnywhere)
 	TWeakObjectPtr<APawn> _targetPlayer;
 
 	UPROPERTY(EditAnywhere)
-	float _targetRadius = 15.0f;
+	float _targetRadius = 2.0f;
 
 	UPROPERTY(VisibleAnywhere, Category = "NPC")
 	EMovablePawnState _npcState;

@@ -21,8 +21,18 @@ public:
 	UPaperFlipbookComponent* GetUmbrellaAttackFlipbook() const;
 	UPaperFlipbookComponent* GetUmbrellaBlockFlipbook() const;
 
+	void ApplyDamage(float damage);
+	void SetHealth(float health);
+	float GetHealth() const;
+	void OnHealthChanged();
+
+	void UpdateHealthProgressBar();
+
 public:
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	float _health = 1.0f;
 
 private:
 	UPROPERTY(EditAnywhere)

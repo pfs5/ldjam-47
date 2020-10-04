@@ -15,6 +15,10 @@ class LDJAM47_API AGentlemanPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	DECLARE_EVENT_OneParam(AGentlemanPlayer, FOnPlayerAttackedTarget, AActor*)
+	FOnPlayerAttackedTarget OnPlayerAttackedTarget;
+
+public:
 	virtual void SetupInputComponent() override;
 
 	virtual void Tick(float deltaSeconds) override;

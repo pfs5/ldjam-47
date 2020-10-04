@@ -2,7 +2,10 @@
 /*----------------------------------------------------------------------------------------------------*/
 #include "GentlemanPlayer.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbookComponent.h"
+#include "../UI/HudWidget.h"
+#include "../UI/ldjam47HUD.h"
 #include "Components/BoxComponent.h"
+#include "GentlemanPlayerController.h"
 /*----------------------------------------------------------------------------------------------------*/
 AGentlemanPlayer::AGentlemanPlayer()
 {
@@ -37,6 +40,59 @@ UPaperFlipbookComponent* AGentlemanPlayer::GetUmbrellaAttackFlipbook() const
 UPaperFlipbookComponent* AGentlemanPlayer::GetUmbrellaBlockFlipbook() const
 {
 	return _umbrellaBlockFlipbook;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::ApplyDamage(float damage)
+{
+	SetHealth(_health - damage);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::SetHealth(float health)
+{
+	if (_health == health)
+	{
+		return;
+	}
+
+	_health = health;
+	_health = FMath::Clamp(_health, 0.0f, 1.0f);
+
+	OnHealthChanged();
+}
+/*----------------------------------------------------------------------------------------------------*/
+float AGentlemanPlayer::GetHealth() const
+{
+	return _health;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::OnHealthChanged()
+{
+	UpdateHealthProgressBar();
+
+	if (_health <= 0.0f)
+	{
+		//Destroy();
+		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "RIP");
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::UpdateHealthProgressBar()
+{
+	AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(GetController());
+	if (playerController == nullptr)
+	{
+		return;
+	}
+
+	Aldjam47HUD* hud = Cast<Aldjam47HUD>(playerController->GetHUD());
+	if (hud != nullptr)
+	{
+		UHudWidget* hudWidget = hud->GetHudWidget();
+		if (hudWidget != nullptr)
+		{
+			hudWidget->SetHealthProgressBar(_health);
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
