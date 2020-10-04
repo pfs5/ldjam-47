@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "Projectile.h"
+#include "../NPC/NPC.h"
 #include "../Player/GentlemanPlayer.h"
 #include "../Player/GentlemanPlayerController.h"
 #include "Components/SphereComponent.h"
@@ -42,6 +43,10 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 		if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(player->GetController()))
 		{
 			playerController->ApplyDamage(EMovablePawnDirection::Left, _damage);
+			if (ANPC* owner = Cast<ANPC>(GetOwner()))
+			{
+				owner->OnNPCAttackedTarget.Broadcast(player);
+			}
 			Destroy();
 		}
 	}

@@ -45,8 +45,10 @@ void ACultistNPC::AttackTarget(AActor* target)
 	FVector location = GetActorLocation();
 	FVector direction = target->GetActorLocation() - location;
 	FMatrix rotationMatrix = FRotationMatrix::MakeFromXY(direction, FVector::RightVector);
-		
-	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator());
+	
+	FActorSpawnParameters spawnParameters;
+	spawnParameters.Owner = this;
+	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator(), spawnParameters);
 
 	_attackDelayTimer = 0.0f;
 }
