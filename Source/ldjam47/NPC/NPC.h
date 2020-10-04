@@ -67,6 +67,8 @@ private:
 
 	void TickHitEffects(float deltaTime);
 
+	APawn* FindPlayerPawn() const;
+
 private:
 	float _health = 1.0f;
 

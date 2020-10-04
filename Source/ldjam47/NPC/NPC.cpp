@@ -131,6 +131,17 @@ void ANPC::TickHitEffects(float deltaTime)
 	_hitEffectValue = FMath::Max(0.f, _hitEffectValue - _hitEffectDecaySpeed * deltaTime);
 }
 /*----------------------------------------------------------------------------------------------------*/
+APawn* ANPC::FindPlayerPawn() const
+{
+	APlayerController* pc = UGameplayStatics::GetPlayerController(this, 0);
+	if (pc == nullptr)
+	{
+		return nullptr;
+	}
+
+	return pc->GetPawn();
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 {
 	return _attackFlipbook;
@@ -422,13 +433,7 @@ void ANPC::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (APlayerController* playerController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
-	{
-		if (APawn* targetPlayer = playerController->GetPawn())
-		{
-			_targetPlayer = targetPlayer;
-		}
-	}
+	_targetPlayer = FindPlayerPawn();
 
 	Reset();
 

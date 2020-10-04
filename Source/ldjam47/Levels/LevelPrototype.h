@@ -6,9 +6,7 @@
 #include "LevelPrototype.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class UBoxComponent;
-class UOverlay;
 class UPaperSpriteComponent;
-class UProgressBar;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API ALevelPrototype : public AActor
