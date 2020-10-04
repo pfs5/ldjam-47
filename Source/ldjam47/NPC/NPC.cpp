@@ -439,7 +439,6 @@ void ANPC::OnHealthChanged()
 {
 	if (_health <= 0.0f)
 	{
-		OnDestroyed.Broadcast();
 		Destroy();
 	}
 }
@@ -481,5 +480,10 @@ void ANPC::BeginPlay()
 			}
 		}
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::EndPlay(const EEndPlayReason::Type endPlayReason)
+{
+	OnDestroyed.Broadcast();
 }
 /*----------------------------------------------------------------------------------------------------*/
