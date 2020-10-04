@@ -316,6 +316,11 @@ void AGentlemanPlayerController::ResetMovement()
 	UpdateFlipbook();
 }
 /*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::ApplyDamage(float damage)
+{
+
+}
+/*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
 	if (otherActor == nullptr && otherActor == this && otherComp == nullptr)
@@ -517,7 +522,7 @@ void AGentlemanPlayerController::MovePlayer()
 void AGentlemanPlayerController::UpdateFlipbook()
 {
 	// Get player direction
-	EMovementInput lastMovementInput = _verticalMovementInputs.empty() ? EMovementInput::None : _verticalMovementInputs.front();
+	EMovementInput lastMovementInput = _horizontalMovementInputs.empty() ? EMovementInput::None : _horizontalMovementInputs.front();
 	if (lastMovementInput == EMovementInput::None)
 	{
 		return;
