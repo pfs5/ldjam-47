@@ -100,6 +100,11 @@ void ANPC::UpdateFlipbook()
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ANPC::OnDamageTaken()
+{
+	_hitEffectValue = _hitEffectStrength;
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ANPC::ApplyKnockback(EMovablePawnDirection direction)
 {
 	if (direction == EMovablePawnDirection::Left)
@@ -112,6 +117,16 @@ void ANPC::ApplyKnockback(EMovablePawnDirection direction)
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ANPC::TickHitEffects(float deltaTime)
+{
+	if (_spriteMaterialInstance != nullptr)
+	{
+		_spriteMaterialInstance->SetScalarParameterValue(TEXT("AdditiveBrightness"), _hitEffectValue);
+	}
+
+	_hitEffectValue = FMath::Max(0.f, _hitEffectValue - _hitEffectDecaySpeed * deltaTime);
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 {
 	return _attackFlipbook;
@@ -121,6 +136,7 @@ UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 void ANPC::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
+	TickHitEffects(deltaTime);
 
 	if (_targetPlayer != nullptr)
 	{
@@ -365,6 +381,8 @@ void ANPC::ApplyDamage(EMovablePawnDirection direction)
 	{
 		//ApplyKnockback(direction);
 	}
+
+	OnDamageTaken();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::SetHealth(float health)
@@ -406,5 +424,17 @@ void ANPC::BeginPlay()
 	}
 
 	Reset();
+
+	if (_spriteMaterial != nullptr)
+	{
+		_spriteMaterialInstance = UMaterialInstanceDynamic::Create(_spriteMaterial, this);
+		if (UPaperFlipbookComponent* flipbookComp = GetSprite())
+		{
+			for (int32 i = 0; i < flipbookComp->GetNumMaterials(); ++i)
+			{
+				flipbookComp->SetMaterial(i, _spriteMaterialInstance);
+			}
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/

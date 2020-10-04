@@ -62,7 +62,10 @@ private:
 
 	void UpdateFlipbook();
 
+	void OnDamageTaken();
 	void ApplyKnockback(EMovablePawnDirection direction);
+
+	void TickHitEffects(float deltaTime);
 
 private:
 	float _health = 1.0f;
@@ -77,6 +80,12 @@ private:
 	float _attackDelay = 2.0f;
 
 	float _attackDelayTimer = 2.0f;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* _spriteMaterial;
+	UMaterialInstanceDynamic* _spriteMaterialInstance = nullptr;
+
+	float _hitEffectValue = 0.f;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -96,6 +105,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _attackHitBox;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|HitEffect")
+	float _hitEffectStrength = 5.f;
+
+	UPROPERTY(EditAnywhere, Category = "NPC|HitEffect")
+	float _hitEffectDecaySpeed = 10.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _attackFlipbook;
