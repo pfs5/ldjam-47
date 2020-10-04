@@ -55,6 +55,7 @@ void AFatNPC::AttackTarget(AActor* target)
 	FActorSpawnParameters spawnParameters;
 	spawnParameters.Owner = this;
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator(), spawnParameters);
+	projectile->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 
 	_attackDelayTimer = 0.0f;
 }
@@ -90,6 +91,7 @@ void AFatNPC::SpecialAttack(AActor* target)
 		FActorSpawnParameters spawnParameters;
 		spawnParameters.Owner = this;
 		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, GetActorLocation(), FRotator(angle * i, 0.0f, 0.0f), spawnParameters);
+		projectile->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 	}
 
 	_specialAttackDelayTimer = 0.0f;

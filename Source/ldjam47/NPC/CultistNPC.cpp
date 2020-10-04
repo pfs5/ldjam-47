@@ -49,6 +49,7 @@ void ACultistNPC::AttackTarget(AActor* target)
 	FActorSpawnParameters spawnParameters;
 	spawnParameters.Owner = this;
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator(), spawnParameters);
+	projectile->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 
 	_attackDelayTimer = 0.0f;
 }
