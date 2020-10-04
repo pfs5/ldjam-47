@@ -8,6 +8,14 @@
 #include "UObject/NoExportTypes.h"
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
+void AFatNPC::Tick(float deltaTime)
+{
+	Super::Tick(deltaTime);
+
+	_specialAttackDelayTimer += deltaTime;
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*override*/
 void AFatNPC::MoveToTarget(AActor* target)
 {
 	Super::MoveToTarget(target);
@@ -17,7 +25,14 @@ void AFatNPC::MoveToTarget(AActor* target)
 		ShakeCamera();
 	}
 
-	AttackTarget(target);
+	if (_attackDelayTimer >= _attackDelay)
+	{
+		AttackTarget(target);
+	}
+	else if (_specialAttackDelayTimer >= _specialAttackDelay)
+	{
+		SpecialAttack(target);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -40,8 +55,6 @@ void AFatNPC::AttackTarget(AActor* target)
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator());
 
 	_attackDelayTimer = 0.0f;
-
-	OnNPCAttackedTarget.Broadcast(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AFatNPC::ShakeCamera()
@@ -55,5 +68,27 @@ void AFatNPC::ShakeCamera()
 	{
 		playerController->PlayerCameraManager->PlayCameraShake(_walkingCameraShake, 1.0f);
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AFatNPC::SpecialAttack(AActor* target)
+{
+	if (_specialAttackDelayTimer < _specialAttackDelay)
+	{
+		return;
+	}
+
+	if (target == nullptr)
+	{
+		return;
+	}
+
+	float angle = 360.0f / _numberOfSpecialAttackProjectiles;
+	for (int32 i = 0; i < _numberOfSpecialAttackProjectiles; ++i)
+	{
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, GetActorLocation(), FRotator(angle * i, 0.0f, 0.0f));
+	}
+
+	_specialAttackDelayTimer = 0.0f;
+	_attackDelayTimer = 0.0f;
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -49,7 +49,5 @@ void ACultistNPC::AttackTarget(AActor* target)
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator());
 
 	_attackDelayTimer = 0.0f;
-
-	OnNPCAttackedTarget.Broadcast(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
