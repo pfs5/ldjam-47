@@ -2,13 +2,14 @@
 /*----------------------------------------------------------------------------------------------------*/
 #include "NPC.h"
 #include "../Player/GentlemanPlayer.h"
+#include "../Player/GentlemanPlayerController.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbookComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PaperFlipbook.h"
-#include "../Player/GentlemanPlayerController.h"
 /*----------------------------------------------------------------------------------------------------*/
 ANPC::ANPC()
 {
@@ -22,6 +23,9 @@ ANPC::ANPC()
 
 	_attackHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackHitBox"));
 	_attackHitBox->SetupAttachment(_attackFlipbook);
+
+	_shootProjectileDirection = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootProjectileDirection"));
+	_shootProjectileDirection->SetupAttachment(GetSprite());
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::SnapLocation()
@@ -145,6 +149,16 @@ APawn* ANPC::FindPlayerPawn() const
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 {
 	return _attackFlipbook;
+}
+/*----------------------------------------------------------------------------------------------------*/
+APawn* ANPC::GetTargetPlayer() const
+{
+	return _targetPlayer.Get();
+}
+/*----------------------------------------------------------------------------------------------------*/
+UArrowComponent* ANPC::GetShootProjectileDirection() const
+{
+	return _shootProjectileDirection;
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -426,6 +440,23 @@ void ANPC::OnHealthChanged()
 	{
 		Destroy();
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::TurnTowardsTarget(AActor* target)
+{
+	FVector targetLocation = target->GetActorLocation();
+	FVector location = GetActorLocation();
+	FVector direction = targetLocation - location;
+
+	if (direction.X > 0.f)
+	{
+		SetNPCDirection(EMovablePawnDirection::Right);
+	}
+	else if (direction.X < 0.f)
+	{
+		SetNPCDirection(EMovablePawnDirection::Left);
+	}
+	
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

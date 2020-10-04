@@ -8,6 +8,7 @@
 #include "NPC.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class APawn;
+class UArrowComponent;
 class UBoxComponent;
 class UPaperFlipbook;
 class UPaperFlipbookComponent;
@@ -25,6 +26,8 @@ public:
 	ANPC();
 
 	UPaperFlipbookComponent* GetAttackFlipbook() const;
+	APawn* GetTargetPlayer() const;
+	UArrowComponent* GetShootProjectileDirection() const;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -50,6 +53,8 @@ public:
 	float GetHealth() const;
 	void OnHealthChanged();
 
+	void TurnTowardsTarget(AActor* target);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -69,16 +74,19 @@ private:
 
 	APawn* FindPlayerPawn() const;
 
-private:
+protected:
 	float _health = 1.0f;
 
+	UPROPERTY(EditAnywhere)
 	float _damageOnHit = 0.25f;
 
 	UPROPERTY(EditAnywhere)
 	bool _applyKnockback = true;
 
+	UPROPERTY(EditAnywhere)
 	float _attackDamage = 0.1f;
 
+	UPROPERTY(EditAnywhere)
 	float _attackDelay = 2.0f;
 
 	float _attackDelayTimer = 2.0f;
@@ -119,6 +127,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _attackFlipbook;
+
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* _shootProjectileDirection;
 
 	FVector _lastMovementVector;
 

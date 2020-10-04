@@ -5,6 +5,11 @@
 /*override*/
 void AMonkNPC::MoveToTarget(AActor* target)
 {
-	return;
+	if (target == nullptr)
+	{
+		return;
+	}
+
+	TurnTowardsTarget(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
