@@ -98,6 +98,18 @@ void ANPC::UpdateFlipbook()
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ANPC::ApplyKnockback(EMovablePawnDirection direction)
+{
+	if (direction == EMovablePawnDirection::Left)
+	{
+		LaunchCharacter(FVector(-5.0f, 0.0f, 0.0f), false, false);
+	}
+	else if (direction == EMovablePawnDirection::Right)
+	{
+		LaunchCharacter(FVector(5.0f, 0.0f, 0.0f), false, false);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
 {
 	return _attackFlipbook;
@@ -299,7 +311,42 @@ void ANPC::MoveToTarget(AActor* target)
 /*virtual*/
 void ANPC::OnArrivedToTarget()
 {
+	
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::ApplyDamage(EMovablePawnDirection direction)
+{
+	SetHealth(_health - _damageOnHit);
+	
+	if (_applyKnockback)
+	{
+		//ApplyKnockback(direction);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::SetHealth(float health)
+{
+	if (_health == health)
+	{
+		return;
+	}
 
+	_health = health;
+
+	OnHealthChanged();
+}
+/*----------------------------------------------------------------------------------------------------*/
+float ANPC::GetHealth() const
+{
+	return _health;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::OnHealthChanged()
+{
+	if (_health <= 0.0f)
+	{
+		Destroy();
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

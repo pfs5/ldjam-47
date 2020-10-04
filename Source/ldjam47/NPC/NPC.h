@@ -40,6 +40,11 @@ public:
 	virtual void MoveToTarget(AActor* target);
 	virtual void OnArrivedToTarget();
 
+	virtual void ApplyDamage(EMovablePawnDirection direction);
+	void SetHealth(float health);
+	float GetHealth() const;
+	void OnHealthChanged();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -51,6 +56,16 @@ private:
 	void SetLastMovementInput(EMovementInput movementInput);
 
 	void UpdateFlipbook();
+
+	void ApplyKnockback(EMovablePawnDirection direction);
+
+private:
+	float _health = 1.0f;
+
+	float _damageOnHit = 0.25f;
+
+	UPROPERTY(EditAnywhere)
+	bool _applyKnockback = true;
 
 private:
 	UPROPERTY(EditAnywhere)

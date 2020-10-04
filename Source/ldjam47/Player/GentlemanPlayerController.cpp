@@ -3,6 +3,7 @@
 #include "GentlemanPlayerController.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbook.h"
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperFlipbookComponent.h"
+#include "../NPC/NPC.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -445,7 +446,6 @@ void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 	//ResetMovement();
 	SetPlayerState(EMovablePawnState::Attacking);
 	AttackScan();
-	ShakeCamera();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnBlockPressed()
@@ -569,8 +569,14 @@ void AGentlemanPlayerController::AttackScan()
 
 	TArray<AActor*> overlappingActors;
 	attackHitBox->GetOverlappingActors(overlappingActors);
-	for (const AActor* overlappingActor : overlappingActors)
+	for (AActor* overlappingActor : overlappingActors)
 	{
+		if (ANPC* npc = Cast<ANPC>(overlappingActor))
+		{
+			npc->ApplyDamage(_playerDirection);
+			ShakeCamera();
+			return;
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());
 	}
 }
