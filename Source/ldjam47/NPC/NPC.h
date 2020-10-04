@@ -87,6 +87,9 @@ private:
 
 	float _hitEffectValue = 0.f;
 
+	UPROPERTY(EditAnywhere)
+	float _knockbackOnHit = 5.0f;
+
 private:
 	UPROPERTY(EditAnywhere)
 	TWeakObjectPtr<APawn> _targetPlayer;
