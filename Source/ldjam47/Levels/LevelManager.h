@@ -25,6 +25,10 @@ public:
 	void LockLevel(const ELevelName& level);
 	void UnlockLevel(const ELevelName& level);
 
+// Events
+public:
+	void Event_OnMonkHit();
+
 private:
 	ALevelPrototype* LoadLevel(const ELevelName& level);
 	void UnloadCurrentLevel();

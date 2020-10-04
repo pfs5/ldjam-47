@@ -42,36 +42,6 @@ void ALevelManager::SetCurrentLevel(const ELevelName& level)
 			playerPawn->SetActorLocation(_currentLevelInstance->GetPlayerStartLocation());
 		}
 	}
-
-	// TESTING
-
-	switch (level)
-	{
-		case ELevelName::LevelLimbo:
-			UnlockLevel(ELevelName::LevelLust);
-			break;
-		case ELevelName::LevelLust:
-			UnlockLevel(ELevelName::LevelGluttony);
-			break;
-		case ELevelName::LevelGluttony:
-			UnlockLevel(ELevelName::LevelGreed);
-			break;
-		case ELevelName::LevelGreed:
-			UnlockLevel(ELevelName::LevelAnger);
-			break;
-		case ELevelName::LevelAnger:
-			UnlockLevel(ELevelName::LevelHeresy);
-			break;
-		case ELevelName::LevelHeresy:
-			UnlockLevel(ELevelName::LevelViolence);
-			break;
-		case ELevelName::LevelViolence:
-			UnlockLevel(ELevelName::LevelFraud);
-			break;
-		case ELevelName::LevelFraud:
-			UnlockLevel(ELevelName::LevelTreachery);
-			break;
-	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 bool ALevelManager::IsLevelLocked(const ELevelName& level) const
@@ -93,6 +63,17 @@ void ALevelManager::LockLevel(const ELevelName& level)
 void ALevelManager::UnlockLevel(const ELevelName& level)
 {
 	_levelsLocked.FindOrAdd(level) = false;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelManager::Event_OnMonkHit()
+{
+	if (_currentLevelInstance != nullptr)
+	{
+		_currentLevelInstance->BP_Event_OnMonkHit();
+	}
+
+	// Reset to first level on monk hit
+	SetCurrentLevel(ELevelName::LevelZero);
 }
 /*----------------------------------------------------------------------------------------------------*/
 ALevelPrototype* ALevelManager::LoadLevel(const ELevelName& level)
