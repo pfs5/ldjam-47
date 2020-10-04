@@ -601,10 +601,13 @@ void AGentlemanPlayerController::AttackScan()
 	{
 		if (ANPC* npc = Cast<ANPC>(overlappingActor))
 		{
-			npc->ApplyDamage(_playerDirection);
-			ShakeCamera();
-			OnPlayerAttackedTarget.Broadcast(npc);
-			return;
+			if (npc->GetHealth() > 0.f)
+			{
+				npc->ApplyDamage(_playerDirection);
+				ShakeCamera();
+				OnPlayerAttackedTarget.Broadcast(npc);
+				return;
+			}
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, *overlappingActor->GetName());
 	}
