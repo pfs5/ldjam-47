@@ -52,7 +52,9 @@ void AFatNPC::AttackTarget(AActor* target)
 	FVector direction = target->GetActorLocation() - location;
 	FMatrix rotationMatrix = FRotationMatrix::MakeFromXY(direction, FVector::RightVector);
 
-	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator());
+	FActorSpawnParameters spawnParameters;
+	spawnParameters.Owner = this;
+	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator(), spawnParameters);
 
 	_attackDelayTimer = 0.0f;
 }
@@ -85,7 +87,9 @@ void AFatNPC::SpecialAttack(AActor* target)
 	float angle = 360.0f / _numberOfSpecialAttackProjectiles;
 	for (int32 i = 0; i < _numberOfSpecialAttackProjectiles; ++i)
 	{
-		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, GetActorLocation(), FRotator(angle * i, 0.0f, 0.0f));
+		FActorSpawnParameters spawnParameters;
+		spawnParameters.Owner = this;
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, GetActorLocation(), FRotator(angle * i, 0.0f, 0.0f), spawnParameters);
 	}
 
 	_specialAttackDelayTimer = 0.0f;
