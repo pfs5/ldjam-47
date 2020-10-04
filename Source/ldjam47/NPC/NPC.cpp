@@ -24,6 +24,12 @@ ANPC::ANPC()
 	_attackHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackHitBox"));
 	_attackHitBox->SetupAttachment(_attackFlipbook);
 
+	_deathFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("DeathFlipbookComponent"));
+	_deathFlipbookComponent->SetupAttachment(RootComponent);
+	_deathFlipbookComponent->Stop();
+	_deathFlipbookComponent->SetLooping(false);
+	_deathFlipbookComponent->SetHiddenInGame(true);
+
 	if (UCharacterMovementComponent* characterMovement = GetCharacterMovement())
 	{
 		characterMovement->bRunPhysicsWithNoController = true;
@@ -146,6 +152,11 @@ APawn* ANPC::FindPlayerPawn() const
 	}
 
 	return pc->GetPawn();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::OnDeathAnimationFinishedPlaying()
+{
+	Destroy();
 }
 /*----------------------------------------------------------------------------------------------------*/
 UPaperFlipbookComponent* ANPC::GetAttackFlipbook() const
@@ -408,6 +419,11 @@ void ANPC::AttackTarget(AActor* target)
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::ApplyDamage(EMovablePawnDirection direction)
 {
+	if (_health <= 0.0f)
+	{
+		return;
+	}
+
 	SetHealth(_health - _damageOnHit);
 	
 	if (_applyKnockback)
@@ -439,7 +455,12 @@ void ANPC::OnHealthChanged()
 {
 	if (_health <= 0.0f)
 	{
-		Destroy();
+		if (_deathFlipbookComponent != nullptr && GetSprite() != nullptr)
+		{
+			GetSprite()->SetHiddenInGame(true);
+			_deathFlipbookComponent->SetHiddenInGame(false);
+			_deathFlipbookComponent->PlayFromStart();
+		}
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -457,7 +478,6 @@ void ANPC::TurnTowardsTarget(AActor* target)
 	{
 		SetNPCDirection(EMovablePawnDirection::Left);
 	}
-	
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -479,6 +499,11 @@ void ANPC::BeginPlay()
 				flipbookComp->SetMaterial(i, _spriteMaterialInstance);
 			}
 		}
+	}
+
+	if (_deathFlipbookComponent)
+	{
+		_deathFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ANPC::OnDeathAnimationFinishedPlaying);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

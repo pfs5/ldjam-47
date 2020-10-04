@@ -25,6 +25,12 @@ AGentlemanPlayer::AGentlemanPlayer()
 	_umbrellaBlockFlipbook->Stop();
 	_umbrellaBlockFlipbook->SetLooping(false);
 	_umbrellaBlockFlipbook->SetHiddenInGame(true);
+
+	_deathFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("DeathFlipbook"));
+	_deathFlipbook->SetupAttachment(RootComponent);
+	_deathFlipbook->Stop();
+	_deathFlipbook->SetLooping(false);
+	_deathFlipbook->SetHiddenInGame(true);
 }
 /*----------------------------------------------------------------------------------------------------*/
 UBoxComponent* AGentlemanPlayer::GetUmbrellaAttackHitBox() const
@@ -71,8 +77,15 @@ void AGentlemanPlayer::OnHealthChanged()
 
 	if (_health <= 0.0f)
 	{
-		//Destroy();
-		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "RIP");
+		if (_deathFlipbook != nullptr && GetUmbrellaBlockFlipbook() != nullptr && GetUmbrellaAttackFlipbook() != nullptr && GetSprite() != nullptr)
+		{
+			GetSprite()->SetHiddenInGame(true);
+			GetUmbrellaAttackFlipbook()->SetHiddenInGame(true);
+			GetUmbrellaBlockFlipbook()->SetHiddenInGame(true);
+			_deathFlipbook->SetHiddenInGame(false);
+
+			_deathFlipbook->PlayFromStart();
+		}
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -96,6 +109,17 @@ void AGentlemanPlayer::UpdateHealthProgressBar()
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
+void AGentlemanPlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (_deathFlipbook)
+	{
+		_deathFlipbook->OnFinishedPlaying.AddDynamic(this, &AGentlemanPlayer::OnDeathAnimationFinishedPlaying);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*override*/
 void AGentlemanPlayer::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
@@ -106,5 +130,10 @@ void AGentlemanPlayer::Tick(float deltaTime)
 	location.X = FMath::GridSnap(location.X, unitsPerPixel);
 	location.Z = FMath::GridSnap(location.Z, unitsPerPixel);
 	SetActorLocation(location);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::OnDeathAnimationFinishedPlaying()
+{
+	//Destroy();
 }
 /*----------------------------------------------------------------------------------------------------*/

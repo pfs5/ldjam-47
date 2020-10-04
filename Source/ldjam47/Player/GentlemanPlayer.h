@@ -28,8 +28,15 @@ public:
 
 	void UpdateHealthProgressBar();
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	UFUNCTION()
+	void OnDeathAnimationFinishedPlaying();
 
 private:
 	float _health = 1.0f;
@@ -46,5 +53,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _umbrellaBlockFlipbook;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPaperFlipbookComponent* _deathFlipbook;
 };
 /*----------------------------------------------------------------------------------------------------*/

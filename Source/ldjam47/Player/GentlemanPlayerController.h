@@ -112,6 +112,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
 	UPaperFlipbook* _walkRightFlipbook;
 
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
+	UPaperFlipbook* _deathFlipbook;
+
 private:
 	UPROPERTY()
 	APawn* _owningPlayer;

@@ -77,6 +77,9 @@ private:
 
 	APawn* FindPlayerPawn() const;
 
+	UFUNCTION()
+	void OnDeathAnimationFinishedPlaying();
+
 protected:
 	float _health = 1.0f;
 
@@ -128,8 +131,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "NPC|HitEffect")
 	float _hitEffectDecaySpeed = 10.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere)
 	UPaperFlipbookComponent* _attackFlipbook;
+
+	UPROPERTY(EditAnywhere)
+	UPaperFlipbookComponent* _deathFlipbookComponent;
 
 	FVector _lastMovementVector;
 
