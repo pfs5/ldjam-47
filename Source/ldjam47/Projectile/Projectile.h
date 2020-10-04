@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class UPaperFlipbookComponent;
 class UProjectileMovementComponent;
+class USphereComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API AProjectile : public AActor
@@ -15,11 +16,24 @@ class LDJAM47_API AProjectile : public AActor
 public:
 	AProjectile();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
+
+private:
+	UPROPERTY(EditAnywhere)
+	float _damage = 0.1f;
+
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* _projectileMovementComponent;
 
 	UPROPERTY(EditAnywhere)
 	UPaperFlipbookComponent* _flipbookComponent;
+
+	UPROPERTY(EditAnywhere)
+	USphereComponent* _sphereComponent;
 };
 /*----------------------------------------------------------------------------------------------------*/

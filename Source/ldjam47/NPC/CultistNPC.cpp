@@ -2,7 +2,9 @@
 /*----------------------------------------------------------------------------------------------------*/
 #include "CultistNPC.h"
 #include "../Projectile/Projectile.h"
-#include "Components/ArrowComponent.h"
+#include "Math/RotationMatrix.h"
+#include "PaperCharacter.h"
+#include "PaperFlipbookComponent.h"
 /*----------------------------------------------------------------------------------------------------*/
 void ACultistNPC::Tick(float DeltaTime)
 {
@@ -37,11 +39,12 @@ void ACultistNPC::AttackTarget(AActor* target)
 	{
 		return;
 	}
-
-	if (UArrowComponent* shootProjectileDirection = GetShootProjectileDirection())
-	{
-		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, shootProjectileDirection->GetComponentTransform());
-	}
+	
+	FVector location = GetActorLocation();
+	FVector direction = target->GetActorLocation() - location;
+	FMatrix rotationMatrix = FRotationMatrix::MakeFromXY(direction, FVector::RightVector);
+		
+	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator());
 
 	_attackDelayTimer = 0.0f;
 
