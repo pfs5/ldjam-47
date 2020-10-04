@@ -46,7 +46,9 @@ protected:
 private:
 	void SnapLocation();
 
-	void SetLastMovementInput(FVector movementVector);
+	void SetLastMovementVector(FVector movementVector);
+	void OnLastMovementVectorChanged(FVector oldMovementVector);
+	void SetLastMovementInput(EMovementInput movementInput);
 
 	void UpdateFlipbook();
 
@@ -71,6 +73,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _attackFlipbook;
+
+	FVector _lastMovementVector;
 
 	EMovementInput _lastMovementInput;
 

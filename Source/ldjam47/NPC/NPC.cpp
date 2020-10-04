@@ -31,16 +31,39 @@ void ANPC::SnapLocation()
 	SetActorLocation(location);
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ANPC::SetLastMovementInput(FVector movementVector)
+void ANPC::SetLastMovementVector(FVector movementVector)
 {
-	if (movementVector.Z <= 0.0f)
+	if (_lastMovementVector == movementVector)
 	{
-		_lastMovementInput = EMovementInput::Left;
+		return;
 	}
-	else if (movementVector.Z > 0.0f)
+
+	FVector oldMovementVector = _lastMovementVector;
+	_lastMovementVector = movementVector;
+
+	OnLastMovementVectorChanged(oldMovementVector);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::OnLastMovementVectorChanged(FVector oldMovementVector)
+{
+	if (_lastMovementVector.X < 0.0f)
 	{
-		_lastMovementInput = EMovementInput::Right;
+		SetLastMovementInput(EMovementInput::Left);
 	}
+	else if (_lastMovementVector.X > 0.0f)
+	{
+		SetLastMovementInput(EMovementInput::Right);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ANPC::SetLastMovementInput(EMovementInput movementInput)
+{
+	if (_lastMovementInput == movementInput)
+	{
+		return;
+	}
+
+	_lastMovementInput = movementInput;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::UpdateFlipbook()
@@ -241,6 +264,7 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::Reset()
 {
+	SetLastMovementVector(GetActorLocation());
 	_npcDirection = EMovablePawnDirection::Left;
 	SetActorRotation(FRotator::ZeroRotator);
 	SetNPCState(EMovablePawnState::Idle);
@@ -257,6 +281,9 @@ void ANPC::MoveToTarget(AActor* target)
 	FVector npcLocation = GetActorLocation();
 	FVector targetLocation = target->GetActorLocation();
 	FVector direction = targetLocation - npcLocation;
+
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, FString::SanitizeFloat(direction.X));
+
 	float distance = direction.Size();
 	if (distance < _targetRadius)
 	{
@@ -265,7 +292,7 @@ void ANPC::MoveToTarget(AActor* target)
 	}
 
 	AddMovementInput(direction);
-	SetLastMovementInput(direction);
+	SetLastMovementVector(direction);
 	UpdateFlipbook();
 }
 /*----------------------------------------------------------------------------------------------------*/
