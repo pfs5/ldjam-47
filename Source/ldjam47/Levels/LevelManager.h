@@ -4,24 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "LevelPrototype.h"
+#include "LevelShared.h"
 #include "LevelManager.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class ALevelPrototype;
-/*----------------------------------------------------------------------------------------------------*/
-UENUM()
-enum class ELevelName : uint8
-{
-	LevelZero,
-	LevelLimbo,
-	LevelLust,
-	LevelGluttony,
-	LevelGreed,
-	LevelAnger,
-	LevelHeresy,
-	LevelViolence,
-	LevelFraud,
-	LevelTreachery
-};
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API ALevelManager : public AActor
@@ -33,16 +19,21 @@ public:
 
 public:
 	virtual void BeginPlay() override;
+	void SetCurrentLevel(const ELevelName& level);
+	
+	bool IsLevelLocked(const ELevelName& level) const;
+	void LockLevel(const ELevelName& level);
+	void UnlockLevel(const ELevelName& level);
 
 private:
-	void SetCurrentLevel(const ELevelName& level);
-
 	ALevelPrototype* LoadLevel(const ELevelName& level);
 	void UnloadCurrentLevel();
 
+	APawn* FindPlayerPawn() const;
+
 private:
 	UPROPERTY(EditDefaultsOnly)
-	ELevelName _currentLevel;
+	ELevelName _initialLevel;
 
 	UPROPERTY(EditDefaultsOnly)
 	TMap<ELevelName, TSubclassOf<ALevelPrototype>> _levels;
@@ -50,6 +41,9 @@ private:
 private:
 	UPROPERTY()
 	ALevelPrototype* _currentLevelInstance = nullptr;
+
+	ELevelName _currentLevel;
+	TMap<ELevelName, bool> _levelsLocked;
 
 };
 /*----------------------------------------------------------------------------------------------------*/

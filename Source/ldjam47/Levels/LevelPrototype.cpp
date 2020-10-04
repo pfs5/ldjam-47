@@ -33,3 +33,8 @@ ALevelPrototype::ALevelPrototype()
 
 }
 /*----------------------------------------------------------------------------------------------------*/
+const FVector& ALevelPrototype::GetPlayerStartLocation() const
+{
+	return _playerStartLocation;
+}
+/*----------------------------------------------------------------------------------------------------*/

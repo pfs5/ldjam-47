@@ -26,6 +26,11 @@ ANPC::ANPC()
 
 	_shootProjectileDirection = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootProjectileDirection"));
 	_shootProjectileDirection->SetupAttachment(GetSprite());
+
+	if (UCharacterMovementComponent* characterMovement = GetCharacterMovement())
+	{
+		characterMovement->bRunPhysicsWithNoController = true;
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::SnapLocation()

@@ -16,7 +16,12 @@ class LDJAM47_API ALevelPrototype : public AActor
 public:
 	ALevelPrototype();
 
+	const FVector& GetPlayerStartLocation() const;
+
 private:
+	UPROPERTY(EditAnywhere, Category = "LevelPrototype")
+	FVector _playerStartLocation = FVector(0.f, 5.f, 0.f);
+
 	UPROPERTY(EditAnywhere)
 	UPaperSpriteComponent* _background;
 
