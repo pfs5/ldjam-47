@@ -304,13 +304,13 @@ void AGentlemanPlayerController::Reset()
 void AGentlemanPlayerController::ResetMovement()
 {
 	_movementUp = 0.f;
-	RemoveMovementInput(EMovementInput::Up);
+	RemoveVerticalMovementInput(EMovementInput::Up);
 	_movementDown = 0.f;
-	RemoveMovementInput(EMovementInput::Down);
+	RemoveVerticalMovementInput(EMovementInput::Down);
 	_movementLeft = 0.f;
-	RemoveMovementInput(EMovementInput::Left);
+	RemoveVerticalMovementInput(EMovementInput::Left);
 	_movementRight = 0.f;
-	RemoveMovementInput(EMovementInput::Right);
+	RemoveVerticalMovementInput(EMovementInput::Right);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -332,7 +332,7 @@ void AGentlemanPlayerController::InputComponent_OnUpPressed()
 	}
 
 	_movementUp = 1.f;
-	AddMovementInput(EMovementInput::Up);
+	AddVerticalMovementInput(EMovementInput::Up);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -346,7 +346,7 @@ void AGentlemanPlayerController::InputComponent_OnDownPressed()
 	}
 
 	_movementDown = 1.f;
-	AddMovementInput(EMovementInput::Down);
+	AddVerticalMovementInput(EMovementInput::Down);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -360,7 +360,7 @@ void AGentlemanPlayerController::InputComponent_OnLeftPressed()
 	}
 
 	_movementLeft = 1.f;
-	AddMovementInput(EMovementInput::Left);
+	AddHorizontalMovementInput(EMovementInput::Left);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -374,7 +374,7 @@ void AGentlemanPlayerController::InputComponent_OnRightPressed()
 	}
 
 	_movementRight = 1.f;
-	AddMovementInput(EMovementInput::Right);
+	AddHorizontalMovementInput(EMovementInput::Right);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -388,7 +388,7 @@ void AGentlemanPlayerController::InputComponent_OnUpReleased()
 	}
 
 	_movementUp = 0.f;
-	RemoveMovementInput(EMovementInput::Up);
+	RemoveVerticalMovementInput(EMovementInput::Up);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -402,7 +402,7 @@ void AGentlemanPlayerController::InputComponent_OnDownReleased()
 	}
 
 	_movementDown = 0.f;
-	RemoveMovementInput(EMovementInput::Down);
+	RemoveVerticalMovementInput(EMovementInput::Down);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -416,7 +416,7 @@ void AGentlemanPlayerController::InputComponent_OnLeftReleased()
 	}
 
 	_movementLeft = 0.f;
-	RemoveMovementInput(EMovementInput::Left);
+	RemoveHorizontalMovementInput(EMovementInput::Left);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -430,7 +430,7 @@ void AGentlemanPlayerController::InputComponent_OnRightReleased()
 	}
 
 	_movementRight = 0.f;
-	RemoveMovementInput(EMovementInput::Right);
+	RemoveHorizontalMovementInput(EMovementInput::Right);
 
 	UpdateMovementVector();
 	UpdateFlipbook();
@@ -475,23 +475,35 @@ void AGentlemanPlayerController::InputComponent_OnBlockReleased()
 	SetPlayerState(EMovablePawnState::Idle);
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::AddMovementInput(const EMovementInput& input)
+void AGentlemanPlayerController::AddVerticalMovementInput(const EMovementInput& input)
 {
-	RemoveMovementInput(input);
-	_movementInputs.push_front(input);
+	RemoveVerticalMovementInput(input);
+	_verticalMovementInputs.push_front(input);
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::RemoveMovementInput(const EMovementInput& input)
+void AGentlemanPlayerController::RemoveVerticalMovementInput(const EMovementInput& input)
 {
-	_movementInputs.erase(std::remove(_movementInputs.begin(), _movementInputs.end(), input), _movementInputs.end());
+	_verticalMovementInputs.erase(std::remove(_verticalMovementInputs.begin(), _verticalMovementInputs.end(), input), _verticalMovementInputs.end());
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::AddHorizontalMovementInput(const EMovementInput& input)
+{
+	RemoveHorizontalMovementInput(input);
+	_horizontalMovementInputs.push_front(input);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayerController::RemoveHorizontalMovementInput(const EMovementInput& input)
+{
+	_horizontalMovementInputs.erase(std::remove(_horizontalMovementInputs.begin(), _horizontalMovementInputs.end(), input), _horizontalMovementInputs.end());
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::UpdateMovementVector()
 {
-	EMovementInput lastInput = _movementInputs.empty() ? EMovementInput::None : _movementInputs.front();
+	EMovementInput lastVerticalInput = _verticalMovementInputs.empty() ? EMovementInput::None : _verticalMovementInputs.front();
+	EMovementInput lastHorizontalInput = _horizontalMovementInputs.empty() ? EMovementInput::None : _horizontalMovementInputs.front();
 
-	_movementVector.X = lastInput == EMovementInput::Left || lastInput == EMovementInput::Right ? _movementRight - _movementLeft : 0.f;
-	_movementVector.Z = lastInput == EMovementInput::Up || lastInput == EMovementInput::Down ? _movementUp - _movementDown : 0.f;
+	_movementVector.X = lastHorizontalInput == EMovementInput::Left || lastHorizontalInput == EMovementInput::Right ? _movementRight - _movementLeft : 0.f;
+	_movementVector.Z = lastVerticalInput == EMovementInput::Up || lastVerticalInput == EMovementInput::Down ? _movementUp - _movementDown : 0.f;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::MovePlayer()
@@ -505,7 +517,7 @@ void AGentlemanPlayerController::MovePlayer()
 void AGentlemanPlayerController::UpdateFlipbook()
 {
 	// Get player direction
-	EMovementInput lastMovementInput = _movementInputs.empty() ? EMovementInput::None : _movementInputs.front();
+	EMovementInput lastMovementInput = _verticalMovementInputs.empty() ? EMovementInput::None : _verticalMovementInputs.front();
 	if (lastMovementInput == EMovementInput::None)
 	{
 		return;

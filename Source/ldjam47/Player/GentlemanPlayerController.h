@@ -61,8 +61,10 @@ private:
 	void InputComponent_OnBlockPressed();
 	void InputComponent_OnBlockReleased();
 
-	void AddMovementInput(const EMovementInput& input);
-	void RemoveMovementInput(const EMovementInput& input);
+	void AddVerticalMovementInput(const EMovementInput& input);
+	void RemoveVerticalMovementInput(const EMovementInput& input);
+	void AddHorizontalMovementInput(const EMovementInput& input);
+	void RemoveHorizontalMovementInput(const EMovementInput& input);
 
 	void UpdateMovementVector();
 	void MovePlayer();
@@ -122,7 +124,8 @@ private:
 	float _movementLeft = 0.f;
 	float _movementRight = 0.f;
 
-	std::deque<EMovementInput> _movementInputs;
+	std::deque<EMovementInput> _verticalMovementInputs;
+	std::deque<EMovementInput> _horizontalMovementInputs;
 
 private:
 	UPROPERTY(EditAnywhere)
