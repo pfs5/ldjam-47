@@ -1,36 +1,27 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
-#include "CultistNPC.h"
+#include "FatNPC.h"
+#include "../Misc/MovablePawnsShared.h"
+#include "../Player/GentlemanPlayerController.h"
 #include "../Projectile/Projectile.h"
-#include "Math/RotationMatrix.h"
-#include "PaperCharacter.h"
-#include "PaperFlipbookComponent.h"
+#include "Camera/CameraShake.h"
+#include "UObject/NoExportTypes.h"
 /*----------------------------------------------------------------------------------------------------*/
-void ACultistNPC::Tick(float DeltaTime)
+/*override*/
+void AFatNPC::MoveToTarget(AActor* target)
 {
-	Super::Tick(DeltaTime);
+	Super::MoveToTarget(target);
 
-	if (APawn* targetPlayer = GetTargetPlayer())
+	if (GetNPCState() == EMovablePawnState::Walking)
 	{
-		TurnTowardsTarget(targetPlayer);
-		AttackTarget(targetPlayer);
+		ShakeCamera();
 	}
+
+	AttackTarget(target);
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
-void ACultistNPC::MoveToTarget(AActor* target)
-{
-	return;
-}
-/*----------------------------------------------------------------------------------------------------*/
-/*override*/
-void ACultistNPC::OnArrivedToTarget(AActor* target)
-{
-	return;
-}
-/*----------------------------------------------------------------------------------------------------*/
-/*override*/
-void ACultistNPC::AttackTarget(AActor* target)
+void AFatNPC::AttackTarget(AActor* target)
 {
 	if (_attackDelayTimer < _attackDelay)
 	{
@@ -41,15 +32,28 @@ void ACultistNPC::AttackTarget(AActor* target)
 	{
 		return;
 	}
-	
+
 	FVector location = GetActorLocation();
 	FVector direction = target->GetActorLocation() - location;
 	FMatrix rotationMatrix = FRotationMatrix::MakeFromXY(direction, FVector::RightVector);
-		
+
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator());
 
 	_attackDelayTimer = 0.0f;
 
 	OnNPCAttackedTarget.Broadcast(target);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AFatNPC::ShakeCamera()
+{
+	if (_walkingCameraShake == nullptr)
+	{
+		return;
+	}
+
+	if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(GetWorld()->GetFirstPlayerController()))
+	{
+		playerController->PlayerCameraManager->PlayCameraShake(_walkingCameraShake, 1.0f);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
