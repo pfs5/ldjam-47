@@ -368,7 +368,7 @@ void ANPC::AttackTarget(AActor* target)
 	{
 		if (AGentlemanPlayerController* targetController = Cast<AGentlemanPlayerController>(targetCharacter->GetController()))
 		{
-			targetController->ApplyDamage(_attackDamage);
+			targetController->ApplyDamage(_npcDirection, _attackDamage);
 		}
 	}
 
