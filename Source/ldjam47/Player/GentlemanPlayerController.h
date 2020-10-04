@@ -43,7 +43,7 @@ public:
 	void Reset();
 	void ResetMovement();
 
-	void ApplyDamage(float damage);
+	void ApplyDamage(EMovablePawnDirection direction, float damage);
 
 private:
 	UFUNCTION()
@@ -78,6 +78,8 @@ private:
 	void AttackScan();
 	UFUNCTION()
 	void OnAttackAnimationFinishedPlaying();
+
+	EMovablePawnDirection GetOppositeDirection(EMovablePawnDirection direction);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Player")

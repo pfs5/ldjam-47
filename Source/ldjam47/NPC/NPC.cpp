@@ -108,13 +108,16 @@ void ANPC::OnDamageTaken()
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::ApplyKnockback(EMovablePawnDirection direction)
 {
+	FVector newLocation = GetActorLocation();
 	if (direction == EMovablePawnDirection::Left)
 	{
-		LaunchCharacter(FVector(-5.0f, 0.0f, 0.0f), false, false);
+		newLocation.X = newLocation.X - _knockbackOnHit;
+		SetActorLocation(newLocation);
 	}
 	else if (direction == EMovablePawnDirection::Right)
 	{
-		LaunchCharacter(FVector(5.0f, 0.0f, 0.0f), false, false);
+		newLocation.X = newLocation.X + _knockbackOnHit;
+		SetActorLocation(newLocation);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -368,7 +371,7 @@ void ANPC::AttackTarget(AActor* target)
 	{
 		if (AGentlemanPlayerController* targetController = Cast<AGentlemanPlayerController>(targetCharacter->GetController()))
 		{
-			targetController->ApplyDamage(_attackDamage);
+			targetController->ApplyDamage(_npcDirection, _attackDamage);
 		}
 	}
 
@@ -383,7 +386,7 @@ void ANPC::ApplyDamage(EMovablePawnDirection direction)
 	
 	if (_applyKnockback)
 	{
-		//ApplyKnockback(direction);
+		ApplyKnockback(direction);
 	}
 
 	OnDamageTaken();

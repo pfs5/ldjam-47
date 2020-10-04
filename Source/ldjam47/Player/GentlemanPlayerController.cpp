@@ -316,9 +316,9 @@ void AGentlemanPlayerController::ResetMovement()
 	UpdateFlipbook();
 }
 /*----------------------------------------------------------------------------------------------------*/
-void AGentlemanPlayerController::ApplyDamage(float damage)
+void AGentlemanPlayerController::ApplyDamage(EMovablePawnDirection direction, float damage)
 {
-	if (_playerState == EMovablePawnState::Blocking)
+	if (_playerState == EMovablePawnState::Blocking && GetOppositeDirection(direction) == _playerDirection)
 	{
 		return;
 	}
@@ -629,5 +629,34 @@ void AGentlemanPlayerController::OnAttackAnimationFinishedPlaying()
 	}
 
 	SetPlayerState(EMovablePawnState::Idle);
+}
+/*----------------------------------------------------------------------------------------------------*/
+EMovablePawnDirection AGentlemanPlayerController::GetOppositeDirection(EMovablePawnDirection direction)
+{
+	switch (direction)
+	{
+		case EMovablePawnDirection::Back:
+		{
+			return EMovablePawnDirection::Front;
+		}
+		case EMovablePawnDirection::Front:
+		{
+			return EMovablePawnDirection::Back;
+		}
+		case EMovablePawnDirection::Left:
+		{
+			return EMovablePawnDirection::Right;
+		}
+		case EMovablePawnDirection::Right:
+		{
+			return EMovablePawnDirection::Left;
+		}
+		default:
+		{
+			break;
+		}
+	}
+
+	return EMovablePawnDirection::Left;
 }
 /*----------------------------------------------------------------------------------------------------*/
