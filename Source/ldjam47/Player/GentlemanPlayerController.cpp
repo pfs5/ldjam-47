@@ -318,7 +318,18 @@ void AGentlemanPlayerController::ResetMovement()
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::ApplyDamage(float damage)
 {
+	if (_playerState == EMovablePawnState::Blocking)
+	{
+		return;
+	}
 
+	AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	player->ApplyDamage(damage);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)

@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PaperFlipbook.h"
+#include "../Player/GentlemanPlayerController.h"
 /*----------------------------------------------------------------------------------------------------*/
 ANPC::ANPC()
 {
@@ -365,7 +366,10 @@ void ANPC::AttackTarget(AActor* target)
 
 	if (AGentlemanPlayer* targetCharacter = Cast<AGentlemanPlayer>(target))
 	{
-		targetCharacter->ApplyDamage(_attackDamage);
+		if (AGentlemanPlayerController* targetController = Cast<AGentlemanPlayerController>(targetCharacter->GetController()))
+		{
+			targetController->ApplyDamage(_attackDamage);
+		}
 	}
 
 	_attackDelayTimer = 0.0f;
