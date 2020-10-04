@@ -34,6 +34,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void SetLeverActive(bool value);
 
+	UFUNCTION(BlueprintCallable)
+	bool IsLeverActive() const;
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	ELevelName _targetLevel;

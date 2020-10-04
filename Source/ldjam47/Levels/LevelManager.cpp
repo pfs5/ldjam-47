@@ -76,6 +76,14 @@ void ALevelManager::Event_OnMonkHit()
 	SetCurrentLevel(ELevelName::LevelZero);
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelManager::Event_OnNPCDied()
+{
+	if (_currentLevelInstance != nullptr)
+	{
+		_currentLevelInstance->Event_OnNPCDied();
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
 ALevelPrototype* ALevelManager::LoadLevel(const ELevelName& level)
 {
 	if (TSubclassOf<ALevelPrototype>* levelPtr = _levels.Find(level))

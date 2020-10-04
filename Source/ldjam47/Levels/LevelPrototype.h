@@ -31,6 +31,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_Event_OnTwoSecondsPassed();
 
+	void Event_OnNPCDied();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Event_OnNPCDied();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "LevelPrototype")
 	FVector _playerStartLocation = FVector(0.f, 5.f, 0.f);

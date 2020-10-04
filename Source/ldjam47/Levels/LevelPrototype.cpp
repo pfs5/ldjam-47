@@ -71,3 +71,8 @@ void ALevelPrototype::Event_OnTwoSecondsPassed()
 	BP_Event_OnTwoSecondsPassed();
 }
 /*----------------------------------------------------------------------------------------------------*/
+void ALevelPrototype::Event_OnNPCDied()
+{
+	BP_Event_OnNPCDied();
+}
+/*----------------------------------------------------------------------------------------------------*/

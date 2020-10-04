@@ -28,6 +28,7 @@ public:
 // Events
 public:
 	void Event_OnMonkHit();
+	void Event_OnNPCDied();
 
 private:
 	ALevelPrototype* LoadLevel(const ELevelName& level);
