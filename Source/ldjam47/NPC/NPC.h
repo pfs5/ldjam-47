@@ -102,7 +102,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float _attackDelay = 2.0f;
 
-	float _attackDelayTimer = 2.0f;
+	float _attackDelayTimer = o.0f;
 
 	UPROPERTY(EditAnywhere)
 	UMaterialInterface* _spriteMaterial;

@@ -559,6 +559,8 @@ void ANPC::BeginPlay()
 	{
 		_deathFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ANPC::OnDeathAnimationFinishedPlaying);
 	}
+
+	_attackDelayTimer = _attackDelay;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ANPC::EndPlay(const EEndPlayReason::Type endPlayReason)
