@@ -60,6 +60,8 @@ void AGentlemanPlayerController::Tick(float deltaSeconds)
 	}
 
 	MovePlayer();
+
+	_attackDelayTimer += deltaSeconds;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::OnPossess(APawn* possesedPawn)
@@ -299,6 +301,8 @@ void AGentlemanPlayerController::Reset()
 	_playerDirection = EMovablePawnDirection::Left;
 	_owningPlayer->SetActorRotation(FRotator::ZeroRotator);
 	SetPlayerState(EMovablePawnState::Idle);
+
+	_attackDelayTimer = _attackDelay;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::ResetMovement()
@@ -459,9 +463,16 @@ void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 		return;
 	}
 
+	if (_attackDelayTimer < _attackDelay)
+	{
+		return;
+	}
+
 	//ResetMovement();
 	SetPlayerState(EMovablePawnState::Attacking);
 	AttackScan();
+
+	_attackDelayTimer = 0.0f;
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::InputComponent_OnBlockPressed()
