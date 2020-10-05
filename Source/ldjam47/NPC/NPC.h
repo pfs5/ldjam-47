@@ -41,6 +41,8 @@ public:
 	EMovablePawnDirection GetNPCDirection() const;
 	void OnNPCDirectionChanged();
 
+	EMovablePawnDirection GetStartingNPCDirection() const;
+
 	void SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDirection);
 
 	void Reset();
@@ -55,6 +57,8 @@ public:
 	void OnHealthChanged();
 
 	void TurnTowardsTarget(AActor* target);
+
+	EMovablePawnDirection GetOppositeDirection(EMovablePawnDirection direction);
 
 protected:
 	virtual void BeginPlay() override;
@@ -112,6 +116,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float _targetRadius = 2.0f;
+
+	UPROPERTY(EditAnywhere, Category = "NPC")
+	EMovablePawnDirection _npcStartingDirection = EMovablePawnDirection::Left;
 
 	UPROPERTY(VisibleAnywhere, Category = "NPC")
 	EMovablePawnState _npcState;

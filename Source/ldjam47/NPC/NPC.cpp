@@ -244,6 +244,11 @@ void ANPC::OnNPCDirectionChanged()
 	SetFlipbook(_npcState, _npcDirection);
 }
 /*----------------------------------------------------------------------------------------------------*/
+EMovablePawnDirection ANPC::GetStartingNPCDirection() const
+{
+	return _npcStartingDirection;
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDirection)
 {
 	UPaperFlipbookComponent* flipbook = GetSprite();
@@ -341,7 +346,7 @@ void ANPC::SetFlipbook(EMovablePawnState npcState, EMovablePawnDirection npcDire
 void ANPC::Reset()
 {
 	SetLastMovementVector(GetActorLocation());
-	_npcDirection = EMovablePawnDirection::Left;
+	SetNPCDirection(_npcStartingDirection);
 	SetActorRotation(FRotator::ZeroRotator);
 	SetNPCState(EMovablePawnState::Idle);
 }
@@ -478,6 +483,35 @@ void ANPC::TurnTowardsTarget(AActor* target)
 	{
 		SetNPCDirection(EMovablePawnDirection::Left);
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+EMovablePawnDirection ANPC::GetOppositeDirection(EMovablePawnDirection direction)
+{
+	switch (direction)
+	{
+		case EMovablePawnDirection::Back:
+		{
+			return EMovablePawnDirection::Front;
+		}
+		case EMovablePawnDirection::Front:
+		{
+			return EMovablePawnDirection::Back;
+		}
+		case EMovablePawnDirection::Left:
+		{
+			return EMovablePawnDirection::Right;
+		}
+		case EMovablePawnDirection::Right:
+		{
+			return EMovablePawnDirection::Left;
+		}
+		default:
+		{
+			break;
+		}
+	}
+
+	return EMovablePawnDirection::Left;
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
