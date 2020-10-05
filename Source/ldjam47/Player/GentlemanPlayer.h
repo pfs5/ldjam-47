@@ -34,6 +34,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -44,12 +45,25 @@ private:
 
 	void Reset();
 
-private:
-	float _health = 1.0f;
+	void OnDamageTaken();
+	void OnInvincibilityTimer();
+	void SetInvincible(bool value);
 
 private:
-	UPROPERTY(EditAnywhere)
+	float _health = 1.0f;
+	bool _isInvincible = false;
+	FTimerHandle _invincibilityTimerHandle;
+	UMaterialInstanceDynamic* _spriteMaterialInstance;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Gentleman")
 	float _pixelsPerUnit = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Gentleman")
+	float _hitInvincibilityTime = 5.f;
+
+	UPROPERTY(EditAnywhere, Category = "Gentleman")
+	UMaterialInterface* _spriteMaterial;
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _umbrellaAttackHitBox;

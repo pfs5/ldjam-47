@@ -6,6 +6,8 @@
 #include "../UI/ldjam47HUD.h"
 #include "Components/BoxComponent.h"
 #include "GentlemanPlayerController.h"
+#include "../GentlemansWorldSettings.h"
+#include "../Levels/LevelManager.h"
 /*----------------------------------------------------------------------------------------------------*/
 AGentlemanPlayer::AGentlemanPlayer()
 {
@@ -50,7 +52,14 @@ UPaperFlipbookComponent* AGentlemanPlayer::GetUmbrellaBlockFlipbook() const
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayer::ApplyDamage(float damage)
 {
+	if (_isInvincible)
+	{
+		return;
+	}
+
 	SetHealth(_health - damage);
+
+	OnDamageTaken();
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayer::SetHealth(float health)
@@ -117,6 +126,26 @@ void AGentlemanPlayer::BeginPlay()
 	{
 		_deathFlipbook->OnFinishedPlaying.AddDynamic(this, &AGentlemanPlayer::OnDeathAnimationFinishedPlaying);
 	}
+
+	if (_spriteMaterial != nullptr)
+	{
+		_spriteMaterialInstance = UMaterialInstanceDynamic::Create(_spriteMaterial, this);
+		if (UPaperFlipbookComponent* flipbookComp = GetSprite())
+		{
+			for (int32 i = 0; i < flipbookComp->GetNumMaterials(); ++i)
+			{
+				flipbookComp->SetMaterial(i, _spriteMaterialInstance);
+			}
+		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+/*override*/
+void AGentlemanPlayer::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	GetWorldTimerManager().ClearTimer(_invincibilityTimerHandle);
+
+	Super::EndPlay(EndPlayReason);
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -149,6 +178,39 @@ void AGentlemanPlayer::Reset()
 	if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(GetController()))
 	{
 		playerController->Reset();
+	}
+
+	if(AGentlemansWorldSettings* ws = Cast<AGentlemansWorldSettings>(GetWorldSettings()))
+	{
+		if (ALevelManager* levelManager = ws->GetLevelManager())
+		{
+			levelManager->ResetLevels();
+		}
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::OnDamageTaken()
+{
+	if (!_isInvincible)
+	{
+		SetInvincible(true);
+		GetWorldTimerManager().SetTimer(_invincibilityTimerHandle, this, &AGentlemanPlayer::OnInvincibilityTimer, _hitInvincibilityTime, false);
+	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::OnInvincibilityTimer()
+{
+	SetInvincible(false);
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::SetInvincible(bool value)
+{
+	_isInvincible = value;
+
+	if (_spriteMaterialInstance != nullptr)
+	{
+		int32 blinkIntensity = value ? 1 : 0;
+		_spriteMaterialInstance->SetScalarParameterValue("BlinkIntensity", blinkIntensity);
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

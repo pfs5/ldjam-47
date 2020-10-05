@@ -25,7 +25,7 @@ public:
 	void LockLevel(const ELevelName& level);
 	void UnlockLevel(const ELevelName& level);
 
-	void RestartGame();
+	void ResetLevels();
 
 // Events
 public:
