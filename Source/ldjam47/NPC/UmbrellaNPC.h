@@ -45,6 +45,10 @@ private:
 	void StopRaining();
 
 private:
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
+
+private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectile> _projectileClass;
 
