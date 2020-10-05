@@ -8,6 +8,7 @@
 #include "NPC.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class APawn;
+class UAudioComponent;
 class UBoxComponent;
 class UPaperFlipbook;
 class UPaperFlipbookComponent;
@@ -180,5 +181,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
 	UPaperFlipbook* _walkRightFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "NPC")
+	UAudioComponent* _audioComponent;
 };
 /*----------------------------------------------------------------------------------------------------*/

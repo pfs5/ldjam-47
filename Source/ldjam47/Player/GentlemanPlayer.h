@@ -34,6 +34,8 @@ public:
 	void UpdateHealthProgressBar();
 
 	void Attack();
+	void StartWalk();
+	void StopWalk();
 
 protected:
 	virtual void BeginPlay() override;
@@ -82,5 +84,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UAudioComponent* _attackAudioComponent;
+
+	UPROPERTY(EditAnywhere)
+	UAudioComponent* _walkAudioComponent;
 };
 /*----------------------------------------------------------------------------------------------------*/

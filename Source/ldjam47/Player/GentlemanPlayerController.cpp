@@ -134,6 +134,31 @@ EMovablePawnState AGentlemanPlayerController::GetPlayerState() const
 void AGentlemanPlayerController::OnPlayerStateChanged()
 {
 	SetFlipbook(_playerState, _playerDirection);
+
+	AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer);
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	switch (_playerState)
+	{
+		case EMovablePawnState::None:
+			player->StopWalk();
+			break;
+		case EMovablePawnState::Idle:
+			player->StopWalk();
+			break;
+		case EMovablePawnState::Walking:
+			player->StartWalk();
+			break;
+		case EMovablePawnState::Attacking:
+			player->StopWalk();
+			break;
+		case EMovablePawnState::Blocking:
+			player->StopWalk();
+			break;
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayerController::SetPlayerDirection(EMovablePawnDirection playerDirection)
