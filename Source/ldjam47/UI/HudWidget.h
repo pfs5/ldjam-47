@@ -8,6 +8,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class UProgressBar;
 class UOverlay;
+class UImage;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API UHudWidget : public UUserWidget
@@ -25,5 +26,23 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
 	UOverlay* _healthOverlay;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UImage* _hpBar_0;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UImage* _hpBar_1;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UImage* _hpBar_2;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UImage* _hpBar_3;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UImage* _hpBar_4;
+
+private:
+	void SetHpValue(int32 value);
 };
 /*----------------------------------------------------------------------------------------------------*/

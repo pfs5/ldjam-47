@@ -81,12 +81,15 @@ void ALevelManager::UnlockLevel(const ELevelName& level)
 	_levelsLocked.FindOrAdd(level) = false;
 }
 /*----------------------------------------------------------------------------------------------------*/
-void ALevelManager::RestartGame()
+void ALevelManager::ResetLevels()
 {
 	for (uint8 i = 0; i < (uint8)ELevelName::Count; ++i)
 	{
-		UnlockLevel((ELevelName)i);
+		LockLevel((ELevelName)i);
 	}
+
+	UnlockLevel(ELevelName::LevelZero);
+	UnlockLevel(ELevelName::LevelLimbo);
 
 	SetCurrentLevel(ELevelName::LevelZero);
 }
