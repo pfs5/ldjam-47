@@ -8,6 +8,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class UCharacterMovementComponent;
 class UPaperFlipbook;
+class UPaperSprite;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API AGentlemanPlayerController : public APlayerController
@@ -146,5 +147,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCameraShake> _horizontalCameraShake;
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = true))
+	TArray<UPaperSprite*> _startCutScene;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TArray<UPaperSprite*> _endCutScene;
 };
 /*----------------------------------------------------------------------------------------------------*/
