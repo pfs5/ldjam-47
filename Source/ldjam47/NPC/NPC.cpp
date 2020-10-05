@@ -199,6 +199,15 @@ void ANPC::Tick(float deltaTime)
 
 	_attackDelayTimer += deltaTime;
 
+	if (_npcState == EMovablePawnState::Idle)
+	{
+		_attackWindUpTimer += deltaTime;
+	}
+	else
+	{
+		_attackWindUpTimer = 0.0f;
+	}
+
 	//SnapLocation();
 }
 /*----------------------------------------------------------------------------------------------------*/
@@ -395,7 +404,23 @@ void ANPC::OnArrivedToTarget(AActor* target)
 		return;
 	}
 
-	AttackTarget(target);
+	if (_attackHitBox == nullptr)
+	{
+		return;
+	}
+
+	if (_attackWindUpTimer < _attackWindUp)
+	{
+		return;
+	}
+
+	TArray<AActor*> overlappingActors;
+	_attackHitBox->GetOverlappingActors(overlappingActors);
+
+	if (overlappingActors.Find(target) && _npcState == EMovablePawnState::Idle)
+	{
+		AttackTarget(target);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*virtual*/
