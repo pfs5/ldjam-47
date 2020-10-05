@@ -56,6 +56,9 @@ public:
 	float GetHealth() const;
 	void OnHealthChanged();
 
+	float GetDamageOnHit() const;
+	float GetAttackDamage() const;
+
 	void TurnTowardsTarget(AActor* target);
 
 	EMovablePawnDirection GetOppositeDirection(EMovablePawnDirection direction);

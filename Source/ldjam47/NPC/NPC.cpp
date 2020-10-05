@@ -479,6 +479,16 @@ void ANPC::OnHealthChanged()
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
+float ANPC::GetDamageOnHit() const
+{
+	return _damageOnHit;
+}
+/*----------------------------------------------------------------------------------------------------*/
+float ANPC::GetAttackDamage() const
+{
+	return _attackDamage;
+}
+/*----------------------------------------------------------------------------------------------------*/
 void ANPC::TurnTowardsTarget(AActor* target)
 {
 	FVector targetLocation = target->GetActorLocation();

@@ -11,13 +11,15 @@ class LDJAM47_API ACarNPC : public ANPC
 	GENERATED_BODY()
 
 public:
-	virtual void Tick(float DeltaTime) override;
-
 	virtual void MoveToTarget(AActor* target) override;
 	virtual void OnArrivedToTarget(AActor* target);
 
 protected:
 	virtual void BeginPlay() override;
+
+private:
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 
 private:
 	UPROPERTY(EditAnywhere)
