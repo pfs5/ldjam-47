@@ -4,6 +4,7 @@
 #include "../Projectile/Projectile.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "PaperFlipbookComponent.h"
 /*----------------------------------------------------------------------------------------------------*/
 AUmbrellaNPC::AUmbrellaNPC(): Super()
 {
@@ -68,16 +69,26 @@ EUmbrellaAttackState AUmbrellaNPC::GetUmbrellaAttackState() const
 /*----------------------------------------------------------------------------------------------------*/
 void AUmbrellaNPC::OnUmbrellaAttackStateChanged()
 {
+	UPaperFlipbookComponent* flipbook = GetSprite();
+
 	switch (_umbrellaAttackState)
 	{
 		case EUmbrellaAttackState::Closed:
 		{
+			if (flipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_closedUmbrella);
+			}
 			StartBouncing();
 			GetWorldTimerManager().SetTimer(_closedUmbrellaAttackStateDurationTimerHandle, this, &AUmbrellaNPC::StopBouncing, _closedUmbrellaAttackStateDuration);
 			break;
 		}
 		case EUmbrellaAttackState::Open:
 		{
+			if (flipbook != nullptr)
+			{
+				flipbook->SetFlipbook(_openUmbrella);
+			}
 			Rain();
 			GetWorldTimerManager().SetTimer(_openUmbrellaAttackStateDurationTimerHandle, this, &AUmbrellaNPC::StopRaining, _openUmbrellaAttackStateDuration);
 			break;
