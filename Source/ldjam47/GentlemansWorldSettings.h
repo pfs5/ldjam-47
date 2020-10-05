@@ -5,6 +5,7 @@
 #include "GameFramework/WorldSettings.h"
 #include "GentlemansWorldSettings.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
+class AAudioManager;
 class ALevelManager;
 /*----------------------------------------------------------------------------------------------------*/
 /**
@@ -19,10 +20,14 @@ public:
 	AGentlemansWorldSettings();
 
 	ALevelManager* GetLevelManager() const;
+	AAudioManager* GetAudioManager() const;
 
 private:
 	UPROPERTY(EditAnywhere)
 	ALevelManager* _levelManager;
+
+	UPROPERTY(EditAnywhere)
+	AAudioManager* _audioManager;
 
 };
 /*----------------------------------------------------------------------------------------------------*/

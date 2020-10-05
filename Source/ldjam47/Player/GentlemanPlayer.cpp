@@ -8,6 +8,7 @@
 #include "GentlemanPlayerController.h"
 #include "../GentlemansWorldSettings.h"
 #include "../Levels/LevelManager.h"
+#include "../Audio/AudioManager.h"
 /*----------------------------------------------------------------------------------------------------*/
 AGentlemanPlayer::AGentlemanPlayer()
 {
@@ -185,6 +186,14 @@ void AGentlemanPlayer::Reset()
 		if (ALevelManager* levelManager = ws->GetLevelManager())
 		{
 			levelManager->ResetLevels();
+		}
+	}
+
+	if (AGentlemansWorldSettings* ws = Cast<AGentlemansWorldSettings>(GetWorldSettings()))
+	{
+		if (AAudioManager* audioManager = ws->GetAudioManager())
+		{
+			audioManager->RestartAudio();
 		}
 	}
 }
