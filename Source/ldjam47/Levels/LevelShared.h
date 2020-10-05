@@ -18,6 +18,6 @@ enum class ELevelName : uint8
 	LevelViolence,
 	LevelFraud,
 	LevelTreachery,
-	Count (meta = Hidden)
+	Count UMETA(Hidden)
 };
 /*----------------------------------------------------------------------------------------------------*/
