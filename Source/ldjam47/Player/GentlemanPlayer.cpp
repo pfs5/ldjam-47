@@ -134,6 +134,6 @@ void AGentlemanPlayer::Tick(float deltaTime)
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayer::OnDeathAnimationFinishedPlaying()
 {
-	//Destroy();
+	OnPlayerDeath.Broadcast();
 }
 /*----------------------------------------------------------------------------------------------------*/
