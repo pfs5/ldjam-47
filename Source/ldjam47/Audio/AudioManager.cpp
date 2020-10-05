@@ -19,6 +19,16 @@ AAudioManager::AAudioManager()
 	_rainAudioComponent->SetupAttachment(RootComponent);
 }
 // ----------------------------------------------------------------------------
+void AAudioManager::StartRainSound()
+{
+
+}
+// ----------------------------------------------------------------------------
+void AAudioManager::StopRainSound()
+{
+
+}
+// ----------------------------------------------------------------------------
 void AAudioManager::RestartAudio()
 {
 	_audioComponent->Stop();

@@ -7,6 +7,7 @@
 #include <Engine/EngineTypes.h>
 #include "Lever.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
+class UAudioComponent;
 class UBoxComponent;
 class UPaperSpriteComponent;
 /*----------------------------------------------------------------------------------------------------*/
@@ -49,6 +50,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _boxComponent;
+
+	UPROPERTY(EditAnywhere)
+	UAudioComponent* _audioComponent;
 
 private:
 	bool _isRight = false;

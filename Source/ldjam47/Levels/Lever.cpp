@@ -6,6 +6,7 @@
 #include <Components/BoxComponent.h>
 #include "../Player/GentlemanPlayer.h"
 #include "LevelManager.h"
+#include <Components/AudioComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
 ALever::ALever()
 {
@@ -19,6 +20,9 @@ ALever::ALever()
 
 	_boxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
 	_boxComponent->SetupAttachment(RootComponent);
+
+	_audioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
+	_audioComponent->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALever::BeginPlay()
@@ -87,6 +91,7 @@ void ALever::Toggle()
 		}
 	}
 
+	_audioComponent->Play();
 
 	OnStateChanged();
 }
