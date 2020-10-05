@@ -5,6 +5,9 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PaperFlipbookComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "../Player/GentlemanPlayer.h"
+#include "../Player/GentlemanPlayerController.h"
 /*----------------------------------------------------------------------------------------------------*/
 AUmbrellaNPC::AUmbrellaNPC(): Super()
 {
@@ -37,6 +40,11 @@ void AUmbrellaNPC::Tick(float DeltaTime)
 void AUmbrellaNPC::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AUmbrellaNPC::OnOverlapBegin);
+	}
 
 	SetUmbrellaAttackState(EUmbrellaAttackState::Closed);
 }
@@ -155,5 +163,25 @@ void AUmbrellaNPC::StopRaining()
 	SetUmbrellaAttackState(EUmbrellaAttackState::Closed);
 
 	_raindropTimer = 0.0f;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AUmbrellaNPC::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
+{
+	if (otherActor == nullptr && otherActor == this && otherComp == nullptr)
+	{
+		return;
+	}
+
+	if (AGentlemanPlayer* player = Cast<AGentlemanPlayer>(otherActor))
+	{
+		if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(player->GetController()))
+		{
+			playerController->ApplyDamage(GetNPCDirection(), GetAttackDamage());
+			if (ANPC* owner = Cast<ANPC>(GetOwner()))
+			{
+				owner->OnNPCAttackedTarget.Broadcast(player);
+			}
+		}
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
