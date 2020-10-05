@@ -16,6 +16,8 @@ class LDJAM47_API AProjectile : public AActor
 public:
 	AProjectile();
 
+	UPaperFlipbookComponent* GetFlipbook() const;
+
 protected:
 	virtual void BeginPlay() override;
 

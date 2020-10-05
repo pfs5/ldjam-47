@@ -7,6 +7,7 @@
 /*----------------------------------------------------------------------------------------------------*/
 class AProjectile;
 class UCameraShake;
+class UPaperFlipbook;
 /*----------------------------------------------------------------------------------------------------*/
 UCLASS()
 class LDJAM47_API AFatNPC : public ANPC
@@ -23,12 +24,23 @@ private:
 	void ShakeCamera();
 	void SpecialAttack(AActor* target);
 
+	UPaperFlipbook* GetRandomFoodFlipbook();
+
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCameraShake> _walkingCameraShake;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectile> _projectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
+	UPaperFlipbook* _hamburgerFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
+	UPaperFlipbook* _friesFlipbook;
+
+	UPROPERTY(EditAnywhere, Category = "Player|Flipbook")
+	UPaperFlipbook* _shakeFlipbook;
 
 private:
 	UPROPERTY(EditAnywhere)

@@ -5,6 +5,9 @@
 #include "../Player/GentlemanPlayerController.h"
 #include "../Projectile/Projectile.h"
 #include "Camera/CameraShake.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "PaperFlipbook.h"
+#include "PaperFlipbookComponent.h"
 #include "UObject/NoExportTypes.h"
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
@@ -55,6 +58,10 @@ void AFatNPC::AttackTarget(AActor* target)
 	FActorSpawnParameters spawnParameters;
 	spawnParameters.Owner = this;
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator(), spawnParameters);
+	if (UPaperFlipbookComponent* flipbook = projectile->GetFlipbook())
+	{
+		flipbook->SetFlipbook(GetRandomFoodFlipbook());
+	}
 
 	_attackDelayTimer = 0.0f;
 }
@@ -90,9 +97,38 @@ void AFatNPC::SpecialAttack(AActor* target)
 		FActorSpawnParameters spawnParameters;
 		spawnParameters.Owner = this;
 		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, GetActorLocation(), FRotator(angle * i, 0.0f, 0.0f), spawnParameters);
+		if (UPaperFlipbookComponent* flipbook = projectile->GetFlipbook())
+		{
+			flipbook->SetFlipbook(GetRandomFoodFlipbook());
+		}
 	}
 
 	_specialAttackDelayTimer = 0.0f;
 	_attackDelayTimer = 0.0f;
+}
+/*----------------------------------------------------------------------------------------------------*/
+UPaperFlipbook* AFatNPC::GetRandomFoodFlipbook()
+{
+	int32 random = UKismetMathLibrary::RandomIntegerInRange(1, 3);
+
+	switch (random)
+	{
+		case 1:
+		{
+			return _friesFlipbook;
+		}
+		case 2:
+		{
+			return _hamburgerFlipbook;
+		}
+		case 3:
+		{
+			return _shakeFlipbook;
+		}
+	default:
+		break;
+	}
+
+	return _hamburgerFlipbook;
 }
 /*----------------------------------------------------------------------------------------------------*/

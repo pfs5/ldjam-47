@@ -19,6 +19,11 @@ AProjectile::AProjectile()
 	_flipbookComponent->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
+UPaperFlipbookComponent* AProjectile::GetFlipbook() const
+{
+	return _flipbookComponent;
+}
+/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void AProjectile::BeginPlay()
 {
