@@ -58,9 +58,12 @@ void AFatNPC::AttackTarget(AActor* target)
 	FActorSpawnParameters spawnParameters;
 	spawnParameters.Owner = this;
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, location, rotationMatrix.Rotator(), spawnParameters);
-	if (UPaperFlipbookComponent* flipbook = projectile->GetFlipbook())
+	if (projectile)
 	{
-		flipbook->SetFlipbook(GetRandomFoodFlipbook());
+		if (UPaperFlipbookComponent* flipbook = projectile->GetFlipbook())
+		{
+			flipbook->SetFlipbook(GetRandomFoodFlipbook());
+		}
 	}
 
 	_attackDelayTimer = 0.0f;
@@ -97,9 +100,12 @@ void AFatNPC::SpecialAttack(AActor* target)
 		FActorSpawnParameters spawnParameters;
 		spawnParameters.Owner = this;
 		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(_projectileClass, GetActorLocation(), FRotator(angle * i, 0.0f, 0.0f), spawnParameters);
-		if (UPaperFlipbookComponent* flipbook = projectile->GetFlipbook())
+		if (projectile)
 		{
-			flipbook->SetFlipbook(GetRandomFoodFlipbook());
+			if (UPaperFlipbookComponent* flipbook = projectile->GetFlipbook())
+			{
+				flipbook->SetFlipbook(GetRandomFoodFlipbook());
+			}
 		}
 	}
 
