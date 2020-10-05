@@ -1,0 +1,79 @@
+- Every room is a discrete level
+- Every time you enter a room, enemies reset
+- Because there are lot's of rooms (9) and you have to constantly loop trough the same rooms, the levels should be quite easy
+- Transitions between rooms is just a black screen lasting a second or two
+
+- The character has two actions:
+    Attack - single short hit with the umbrella
+    Block - Simple version: While blocking take reduced damage from the front. Cool version: While blocking, block projectiles and send them back (always jump back to the one who threw)
+
+INTRO CUT SCENE
+    - The gentleman walks to the river styx and talks to the ferryman
+    - "Pardon me kind sir!"
+    - "Which way to the tube?"
+    - "ακριβώς μπροστά."
+    - "Splendid!"
+
+Level 0
+    - Entry to hell
+    - Shore of the styx
+    - Wooden house door with a mat
+    - Next to the hell door is a door with bars
+
+LIMBO [1]
+    - Monk just sitting around
+    - If you hit one you reset to level 0
+    - If you wait 10 seconds a hidden leaver appears
+    - The leaver opens the door in Level0 -> leads to LUST
+    - Has locked barred door leading to GLUTTONY [3]
+    - MAP: Grass
+
+LUST [2]
+    - Lots of naked people trying to touch you
+    - Kill them all and a door in LIMBO [1] opens
+    - Has locked door leading to GREED [4]
+    - MAP: Eden
+
+GLUTTONY [3]
+    - Miniboss fight
+    - Fat person moving slowly
+    - Two attacks? Throws hamburgers when far, explodes with lots of hamburgers when near.
+    - Nice to have: blocking hamburgers sends them back as projectiles
+    - Killing the boss opens 
+
+GREED [4]
+    - Accountants in suits and priests
+    - Dante describes them as pushing gieant weights (stones) - have the enemies throw stones at you?
+    - Nice to have - must kill them by blocking stones and throwing them back at them
+    - Killing them all opens a door in GLUTTONY [3]
+
+ANGER [5]
+    - The levels has roads going from left to right with cars speeding constantly (left to right / right to left)
+    - Cars don't attack you, they just move
+    - Defeat the cars by hitting them
+    - You lose HP if the car hits you
+    - Defeating cars opens door in GREED [4]
+
+HERESY [6]
+    - Beating te level opens the door in ANGER [5]
+
+VIOLENCE [7]
+    - Lots of red-eyed rabbits hitting you with melee attacks
+    - Rabbits die with single hit
+    - Defeating the rabbits opens the door in HERESY [6]
+
+FRAUD [8]
+    - Fake moonlanding scene with astronaut enemies
+    - Beating the level opens the door in VIOLENCE [7]
+    - MAP: Moon
+
+TREACHERY [9]
+    - Final boss fight - you are fighting your faithful umbrella
+    - Your basic attacks change to fists or stick
+    - You can't block anymore (no umbrella)
+    - The umbrella just spins around and moves by bouncing off the walls (like pinball)
+    - Occasionally starts raining, slowing you down
+    - Defeating the boss opens the door in this level
+
+FINAL CUT SCENE
+    - The gentleman just waiting at the metro station, entering the train and leaving
