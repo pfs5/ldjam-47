@@ -9,6 +9,7 @@
 #include "../GentlemansWorldSettings.h"
 #include "../Levels/LevelManager.h"
 #include "../Audio/AudioManager.h"
+#include <Components/AudioComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
 AGentlemanPlayer::AGentlemanPlayer()
 {
@@ -34,6 +35,9 @@ AGentlemanPlayer::AGentlemanPlayer()
 	_deathFlipbook->Stop();
 	_deathFlipbook->SetLooping(false);
 	_deathFlipbook->SetHiddenInGame(true);
+
+	_attackAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
+	_attackAudioComponent->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 UBoxComponent* AGentlemanPlayer::GetUmbrellaAttackHitBox() const
@@ -116,6 +120,11 @@ void AGentlemanPlayer::UpdateHealthProgressBar()
 			hudWidget->SetHealthProgressBar(_health);
 		}
 	}
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::Attack()
+{
+	_attackAudioComponent->Play();
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/

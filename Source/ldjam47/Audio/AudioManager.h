@@ -20,10 +20,19 @@ class LDJAM47_API AAudioManager : public AActor
 public:
 	AAudioManager();
 
+	void StartRainSound();
+	void StopRainSound();
+
 	void RestartAudio();
 
 private:
 	UPROPERTY(EditAnywhere)
 	UAudioComponent* _audioComponent;
+
+	UPROPERTY(EditAnywhere)
+	UAudioComponent* _rainAudioComponent;
+
 };
+// ----------------------------------------------------------------------------
+AAudioManager* GetAudioManager(UObject* worldContextObject);
 // ----------------------------------------------------------------------------

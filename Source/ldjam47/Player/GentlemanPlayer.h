@@ -6,6 +6,7 @@
 #include "../Plugins/2D/Paper2D/Source/Paper2D/Classes/PaperCharacter.h"
 #include "GentlemanPlayer.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
+class UAudioComponent;
 class UBoxComponent;
 class UPaperFlipbookComponent;
 /*----------------------------------------------------------------------------------------------------*/
@@ -31,6 +32,8 @@ public:
 	void OnHealthChanged();
 
 	void UpdateHealthProgressBar();
+
+	void Attack();
 
 protected:
 	virtual void BeginPlay() override;
@@ -76,5 +79,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPaperFlipbookComponent* _deathFlipbook;
+
+	UPROPERTY(EditAnywhere)
+	UAudioComponent* _attackAudioComponent;
 };
 /*----------------------------------------------------------------------------------------------------*/

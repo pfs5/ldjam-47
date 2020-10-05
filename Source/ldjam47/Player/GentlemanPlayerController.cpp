@@ -471,6 +471,11 @@ void AGentlemanPlayerController::InputComponent_OnAttackPressed()
 	//ResetMovement();
 	SetPlayerState(EMovablePawnState::Attacking);
 	AttackScan();
+	
+	if (AGentlemanPlayer* player = Cast<AGentlemanPlayer>(_owningPlayer))
+	{
+		player->Attack();
+	}
 
 	_attackDelayTimer = 0.0f;
 }
