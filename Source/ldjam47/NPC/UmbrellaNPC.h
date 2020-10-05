@@ -75,7 +75,7 @@ private:
 	float _rainStartingZPosition = 100.0f;
 
 	UPROPERTY(EditAnywhere)
-	float _delayBetweenRaindrop = 0.1f;
+	float _delayBetweenRaindrop = 0.25f;
 
 	float _raindropTimer = 0.0f;
 };
