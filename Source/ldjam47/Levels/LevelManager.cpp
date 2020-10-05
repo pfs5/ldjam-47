@@ -15,16 +15,32 @@ void ALevelManager::BeginPlay()
 	Super::BeginPlay();
 
 	// Init level locked status
-	_levelsLocked.Emplace(ELevelName::LevelZero, false);
-	_levelsLocked.Emplace(ELevelName::LevelLimbo, false);
-	_levelsLocked.Emplace(ELevelName::LevelLust, true);
-	_levelsLocked.Emplace(ELevelName::LevelGluttony, true);
-	_levelsLocked.Emplace(ELevelName::LevelGreed, true);
-	_levelsLocked.Emplace(ELevelName::LevelAnger, true);
-	_levelsLocked.Emplace(ELevelName::LevelHeresy, true);
-	_levelsLocked.Emplace(ELevelName::LevelViolence, true);
-	_levelsLocked.Emplace(ELevelName::LevelFraud , true);
-	_levelsLocked.Emplace(ELevelName::LevelTreachery , true);
+	if (_debugMode)
+	{
+		_levelsLocked.Emplace(ELevelName::LevelZero, false);
+		_levelsLocked.Emplace(ELevelName::LevelLimbo, false);
+		_levelsLocked.Emplace(ELevelName::LevelLust, false);
+		_levelsLocked.Emplace(ELevelName::LevelGluttony, false);
+		_levelsLocked.Emplace(ELevelName::LevelGreed, false);
+		_levelsLocked.Emplace(ELevelName::LevelAnger, false);
+		_levelsLocked.Emplace(ELevelName::LevelHeresy, false);
+		_levelsLocked.Emplace(ELevelName::LevelViolence, false);
+		_levelsLocked.Emplace(ELevelName::LevelFraud, false);
+		_levelsLocked.Emplace(ELevelName::LevelTreachery, false);
+	}
+	else
+	{
+		_levelsLocked.Emplace(ELevelName::LevelZero, false);
+		_levelsLocked.Emplace(ELevelName::LevelLimbo, false);
+		_levelsLocked.Emplace(ELevelName::LevelLust, true);
+		_levelsLocked.Emplace(ELevelName::LevelGluttony, true);
+		_levelsLocked.Emplace(ELevelName::LevelGreed, true);
+		_levelsLocked.Emplace(ELevelName::LevelAnger, true);
+		_levelsLocked.Emplace(ELevelName::LevelHeresy, true);
+		_levelsLocked.Emplace(ELevelName::LevelViolence, true);
+		_levelsLocked.Emplace(ELevelName::LevelFraud, true);
+		_levelsLocked.Emplace(ELevelName::LevelTreachery, true);
+	}
 
 	SetCurrentLevel(_initialLevel);
 }
@@ -63,6 +79,14 @@ void ALevelManager::LockLevel(const ELevelName& level)
 void ALevelManager::UnlockLevel(const ELevelName& level)
 {
 	_levelsLocked.FindOrAdd(level) = false;
+}
+/*----------------------------------------------------------------------------------------------------*/
+void ALevelManager::RestartGame()
+{
+	for (uint8 i = 0; i < ELevelName::Count; ++i)
+	{
+		UnlockLevel((ELevelName)i);
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelManager::Event_OnMonkHit()

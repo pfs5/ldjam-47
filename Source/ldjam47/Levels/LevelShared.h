@@ -17,6 +17,7 @@ enum class ELevelName : uint8
 	LevelHeresy,
 	LevelViolence,
 	LevelFraud,
-	LevelTreachery
+	LevelTreachery,
+	Count (meta = Hidden)
 };
 /*----------------------------------------------------------------------------------------------------*/
