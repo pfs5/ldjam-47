@@ -113,6 +113,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float _knockbackOnHit = 5.0f;
 
+	UPROPERTY(EditAnywhere)
+	float _attackWindUp = 1.0f;
+
+	float _attackWindUpTimer = 0.0f;
+
 private:
 	UPROPERTY(EditAnywhere)
 	TWeakObjectPtr<APawn> _targetPlayer;
