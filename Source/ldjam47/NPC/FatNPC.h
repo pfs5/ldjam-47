@@ -44,7 +44,7 @@ private:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float _specialAttackDelay = 20.0f;
+	float _specialAttackDelay = 10.0f;
 
 	float _specialAttackDelayTimer = 0.0f;
 
