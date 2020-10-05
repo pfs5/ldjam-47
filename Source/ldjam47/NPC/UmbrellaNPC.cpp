@@ -1,13 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*----------------------------------------------------------------------------------------------------*/
 #include "UmbrellaNPC.h"
+#include "../Audio/AudioManager.h"
+#include "../Player/GentlemanPlayer.h"
+#include "../Player/GentlemanPlayerController.h"
 #include "../Projectile/Projectile.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "../Player/GentlemanPlayer.h"
-#include "../Player/GentlemanPlayerController.h"
+#include "GameFramework/WorldSettings.h"
+#include "../GentlemansWorldSettings.h"
 /*----------------------------------------------------------------------------------------------------*/
 AUmbrellaNPC::AUmbrellaNPC(): Super()
 {
@@ -98,6 +101,14 @@ void AUmbrellaNPC::OnUmbrellaAttackStateChanged()
 	{
 		case EUmbrellaAttackState::Closed:
 		{
+			if (AGentlemansWorldSettings* ws = Cast<AGentlemansWorldSettings>(GetWorldSettings()))
+			{
+				if (AAudioManager* audioManager = ws->GetAudioManager())
+				{
+					audioManager->StopRainSound();
+				}
+			}
+
 			_openUmbrellaFlipbookComponent->SetHiddenInGame(true);
 			flipbook->SetHiddenInGame(false);
 			StartBouncing();
@@ -106,6 +117,14 @@ void AUmbrellaNPC::OnUmbrellaAttackStateChanged()
 		}
 		case EUmbrellaAttackState::Open:
 		{
+			if (AGentlemansWorldSettings* ws = Cast<AGentlemansWorldSettings>(GetWorldSettings()))
+			{
+				if (AAudioManager* audioManager = ws->GetAudioManager())
+				{
+					audioManager->StartRainSound();
+				}
+			}
+
 			flipbook->SetHiddenInGame(true);
 			_openUmbrellaFlipbookComponent->SetHiddenInGame(false);
 			_openUmbrellaFlipbookComponent->PlayFromStart();

@@ -21,12 +21,12 @@ AAudioManager::AAudioManager()
 // ----------------------------------------------------------------------------
 void AAudioManager::StartRainSound()
 {
-
+	_rainAudioComponent->Play();
 }
 // ----------------------------------------------------------------------------
 void AAudioManager::StopRainSound()
 {
-
+	_rainAudioComponent->Stop();
 }
 // ----------------------------------------------------------------------------
 void AAudioManager::RestartAudio()
