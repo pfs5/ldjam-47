@@ -82,6 +82,12 @@ private:
 	EMovablePawnDirection GetOppositeDirection(EMovablePawnDirection direction);
 
 private:
+	UPROPERTY(EditAnywhere)
+	float _attackDelay = 0.25f;
+
+	float _attackDelayTimer = 0.0f;
+
+private:
 	UPROPERTY(VisibleAnywhere, Category = "Player")
 	EMovablePawnState _playerState;
 
