@@ -134,6 +134,21 @@ void AGentlemanPlayer::Tick(float deltaTime)
 /*----------------------------------------------------------------------------------------------------*/
 void AGentlemanPlayer::OnDeathAnimationFinishedPlaying()
 {
+	Reset();
+
 	OnPlayerDeath.Broadcast();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::Reset()
+{
+	SetHealth(1.0f);
+
+	_deathFlipbook->SetHiddenInGame(true);
+	GetSprite()->SetHiddenInGame(false);
+	
+	if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(GetController()))
+	{
+		playerController->Reset();
+	}
 }
 /*----------------------------------------------------------------------------------------------------*/

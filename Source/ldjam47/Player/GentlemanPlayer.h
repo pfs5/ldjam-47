@@ -42,6 +42,8 @@ private:
 	UFUNCTION()
 	void OnDeathAnimationFinishedPlaying();
 
+	void Reset();
+
 private:
 	float _health = 1.0f;
 
