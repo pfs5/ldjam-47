@@ -25,6 +25,8 @@ public:
 	void LockLevel(const ELevelName& level);
 	void UnlockLevel(const ELevelName& level);
 
+	void RestartGame();
+
 // Events
 public:
 	void Event_OnMonkHit();
@@ -42,6 +44,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TMap<ELevelName, TSubclassOf<ALevelPrototype>> _levels;
+
+	UPROPERTY(EditAnywhere)
+	bool _debugMode = true;
 
 private:
 	UPROPERTY()
