@@ -83,10 +83,12 @@ void ALevelManager::UnlockLevel(const ELevelName& level)
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelManager::RestartGame()
 {
-	for (uint8 i = 0; i < ELevelName::Count; ++i)
+	for (uint8 i = 0; i < (uint8)ELevelName::Count; ++i)
 	{
 		UnlockLevel((ELevelName)i);
 	}
+
+	SetCurrentLevel(ELevelName::LevelZero);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void ALevelManager::Event_OnMonkHit()
