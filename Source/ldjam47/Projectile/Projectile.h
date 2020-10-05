@@ -18,6 +18,8 @@ public:
 
 	UPaperFlipbookComponent* GetFlipbook() const;
 
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	virtual void BeginPlay() override;
 

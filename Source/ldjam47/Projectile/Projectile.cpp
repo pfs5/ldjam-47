@@ -10,6 +10,8 @@
 /*----------------------------------------------------------------------------------------------------*/
 AProjectile::AProjectile()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
 	_projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 
 	_sphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
@@ -24,10 +26,16 @@ UPaperFlipbookComponent* AProjectile::GetFlipbook() const
 	return _flipbookComponent;
 }
 /*----------------------------------------------------------------------------------------------------*/
+void AProjectile::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+/*----------------------------------------------------------------------------------------------------*/
 /*override*/
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
 
 	if (_sphereComponent)
 	{
@@ -36,6 +44,7 @@ void AProjectile::BeginPlay()
 
 	if (ANPC* owner = Cast<ANPC>(GetOwner()))
 	{
+		SetInstigator(owner);
 		owner->OnDestroyed.AddUObject(this, &AProjectile::OnOwnerDestroyed);
 	}
 }
@@ -48,13 +57,26 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 		return;
 	}
 
+	if (APawn* pawn = Cast<APawn>(otherActor))
+	{
+		if (pawn == GetInstigator())
+		{
+			return;
+		}
+	}
+
 	if (AGentlemanPlayer* player = Cast<AGentlemanPlayer>(otherActor))
 	{
 		if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(player->GetController()))
 		{
 			if (playerController->GetPlayerState() == EMovablePawnState::Blocking)
 			{
-				
+				if (ANPC* owner = Cast<ANPC>(GetOwner()))
+				{
+					FVector newDirection = owner->GetActorLocation() - GetActorLocation();
+					_projectileMovementComponent->SetVelocityInLocalSpace(newDirection);
+					SetInstigator(player);
+				}
 			}
 			else
 			{
@@ -66,6 +88,12 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 				Destroy();
 			}
 		}
+	}
+	else if (ANPC* npc = Cast<ANPC>(otherActor))
+	{
+		EMovablePawnDirection attackDirection = (npc->GetActorLocation().X - GetActorLocation().X) >= 0.0f ? EMovablePawnDirection::Right : EMovablePawnDirection::Left;
+		npc->ApplyDamage(attackDirection);
+		Destroy();
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/
