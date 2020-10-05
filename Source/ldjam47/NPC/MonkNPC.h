@@ -11,6 +11,7 @@ class LDJAM47_API AMonkNPC : public ANPC
 	GENERATED_BODY()
 
 public:
+	virtual void ApplyDamage(EMovablePawnDirection direction) override;
 	virtual void MoveToTarget(AActor* target) override;
 };
 /*----------------------------------------------------------------------------------------------------*/

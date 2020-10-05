@@ -10,6 +10,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PaperFlipbook.h"
+#include "../GentlemansWorldSettings.h"
+#include "../Levels/LevelManager.h"
 /*----------------------------------------------------------------------------------------------------*/
 ANPC::ANPC()
 {
@@ -465,6 +467,14 @@ void ANPC::OnHealthChanged()
 			GetSprite()->SetHiddenInGame(true);
 			_deathFlipbookComponent->SetHiddenInGame(false);
 			_deathFlipbookComponent->PlayFromStart();
+		}
+
+		if (AGentlemansWorldSettings* ws = Cast<AGentlemansWorldSettings>(GetWorldSettings()))
+		{
+			if (ALevelManager* levelManager = ws->GetLevelManager())
+			{
+				levelManager->Event_OnNPCDied();
+			}
 		}
 	}
 }

@@ -16,7 +16,24 @@ class LDJAM47_API ALevelPrototype : public AActor
 public:
 	ALevelPrototype();
 
+	void BeginPlay() override;
+	void Tick(float deltaTime) override;
+
 	const FVector& GetPlayerStartLocation() const;
+
+// Events
+public:
+	void Event_OnMonkHit();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Event_OnMonkHit();
+
+	void Event_OnTwoSecondsPassed();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Event_OnTwoSecondsPassed();
+
+	void Event_OnNPCDied();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_Event_OnNPCDied();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "LevelPrototype")
@@ -39,5 +56,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* _boxBottom;
+
+private:
+	float _timeCounter;
 };
 /*----------------------------------------------------------------------------------------------------*/
