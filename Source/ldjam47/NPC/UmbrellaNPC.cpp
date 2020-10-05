@@ -10,6 +10,12 @@ AUmbrellaNPC::AUmbrellaNPC(): Super()
 {
 	_projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	_projectileMovementComponent->bAutoActivate = false;
+
+	_openUmbrellaFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("OpenUmbrellaFlipbookComponent"));
+	_openUmbrellaFlipbookComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	_openUmbrellaFlipbookComponent->Stop();
+	_openUmbrellaFlipbookComponent->SetLooping(false);
+	_openUmbrellaFlipbookComponent->SetHiddenInGame(true);
 }
 /*----------------------------------------------------------------------------------------------------*/
 void AUmbrellaNPC::Tick(float DeltaTime)
@@ -70,25 +76,31 @@ EUmbrellaAttackState AUmbrellaNPC::GetUmbrellaAttackState() const
 void AUmbrellaNPC::OnUmbrellaAttackStateChanged()
 {
 	UPaperFlipbookComponent* flipbook = GetSprite();
+	if (flipbook == nullptr)
+	{
+		return;
+	}
+
+	if (_openUmbrellaFlipbookComponent == nullptr)
+	{
+		return;
+	}
 
 	switch (_umbrellaAttackState)
 	{
 		case EUmbrellaAttackState::Closed:
 		{
-			if (flipbook != nullptr)
-			{
-				flipbook->SetFlipbook(_closedUmbrella);
-			}
+			_openUmbrellaFlipbookComponent->SetHiddenInGame(true);
+			flipbook->SetHiddenInGame(false);
 			StartBouncing();
 			GetWorldTimerManager().SetTimer(_closedUmbrellaAttackStateDurationTimerHandle, this, &AUmbrellaNPC::StopBouncing, _closedUmbrellaAttackStateDuration);
 			break;
 		}
 		case EUmbrellaAttackState::Open:
 		{
-			if (flipbook != nullptr)
-			{
-				flipbook->SetFlipbook(_openUmbrella);
-			}
+			flipbook->SetHiddenInGame(true);
+			_openUmbrellaFlipbookComponent->SetHiddenInGame(false);
+			_openUmbrellaFlipbookComponent->PlayFromStart();
 			Rain();
 			GetWorldTimerManager().SetTimer(_openUmbrellaAttackStateDurationTimerHandle, this, &AUmbrellaNPC::StopRaining, _openUmbrellaAttackStateDuration);
 			break;

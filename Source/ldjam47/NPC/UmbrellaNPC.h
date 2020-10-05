@@ -6,7 +6,7 @@
 #include "UmbrellaNPC.generated.h"
 /*----------------------------------------------------------------------------------------------------*/
 class AProjectile;
-class UPaperFlipbook;
+class UPaperFlipbookComponent;
 class UProjectileMovementComponent;
 /*----------------------------------------------------------------------------------------------------*/
 UENUM(BlueprintType)
@@ -81,9 +81,6 @@ private:
 	float _raindropTimer = 0.0f;
 
 	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
-	UPaperFlipbook* _closedUmbrella;
-
-	UPROPERTY(EditAnywhere, Category = "NPC|Flipbook")
-	UPaperFlipbook* _openUmbrella;
+	UPaperFlipbookComponent* _openUmbrellaFlipbookComponent;
 };
 /*----------------------------------------------------------------------------------------------------*/
