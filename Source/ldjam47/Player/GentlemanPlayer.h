@@ -15,6 +15,10 @@ class LDJAM47_API AGentlemanPlayer : public APaperCharacter
 	GENERATED_BODY()
 
 public:
+	DECLARE_EVENT(AGentlemanPlayer, FOnPlayerDeath)
+	FOnPlayerDeath OnPlayerDeath;
+
+public:
 	AGentlemanPlayer();
 
 	UBoxComponent* GetUmbrellaAttackHitBox() const;
