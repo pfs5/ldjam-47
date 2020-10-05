@@ -12,6 +12,7 @@
 #include "PaperFlipbook.h"
 #include "../GentlemansWorldSettings.h"
 #include "../Levels/LevelManager.h"
+#include <Components/AudioComponent.h>
 /*----------------------------------------------------------------------------------------------------*/
 ANPC::ANPC()
 {
@@ -31,6 +32,9 @@ ANPC::ANPC()
 	_deathFlipbookComponent->Stop();
 	_deathFlipbookComponent->SetLooping(false);
 	_deathFlipbookComponent->SetHiddenInGame(true);
+
+	_audioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
+	_audioComponent->SetupAttachment(RootComponent);
 
 	if (UCharacterMovementComponent* characterMovement = GetCharacterMovement())
 	{
@@ -501,6 +505,8 @@ void ANPC::OnHealthChanged()
 				levelManager->Event_OnNPCDied();
 			}
 		}
+
+		UGameplayStatics::PlaySoundAtLocation(this, _audioComponent->Sound, GetActorLocation());
 	}
 }
 /*----------------------------------------------------------------------------------------------------*/

@@ -38,6 +38,9 @@ AGentlemanPlayer::AGentlemanPlayer()
 
 	_attackAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
 	_attackAudioComponent->SetupAttachment(RootComponent);
+
+	_walkAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Walk Audio Component"));
+	_walkAudioComponent->SetupAttachment(RootComponent);
 }
 /*----------------------------------------------------------------------------------------------------*/
 UBoxComponent* AGentlemanPlayer::GetUmbrellaAttackHitBox() const
@@ -125,6 +128,16 @@ void AGentlemanPlayer::UpdateHealthProgressBar()
 void AGentlemanPlayer::Attack()
 {
 	_attackAudioComponent->Play();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::StartWalk()
+{
+	_walkAudioComponent->Play();
+}
+/*----------------------------------------------------------------------------------------------------*/
+void AGentlemanPlayer::StopWalk()
+{
+	_walkAudioComponent->Stop();
 }
 /*----------------------------------------------------------------------------------------------------*/
 /*override*/
