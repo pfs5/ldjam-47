@@ -52,12 +52,19 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 	{
 		if (AGentlemanPlayerController* playerController = Cast<AGentlemanPlayerController>(player->GetController()))
 		{
-			playerController->ApplyDamage(EMovablePawnDirection::Left, _damage);
-			if (ANPC* owner = Cast<ANPC>(GetOwner()))
+			if (playerController->GetPlayerState() == EMovablePawnState::Blocking)
 			{
-				owner->OnNPCAttackedTarget.Broadcast(player);
+				
 			}
-			Destroy();
+			else
+			{
+				playerController->ApplyDamage(EMovablePawnDirection::Left, _damage);
+				if (ANPC* owner = Cast<ANPC>(GetOwner()))
+				{
+					owner->OnNPCAttackedTarget.Broadcast(player);
+				}
+				Destroy();
+			}
 		}
 	}
 }
